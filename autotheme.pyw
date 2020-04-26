@@ -27,7 +27,7 @@ try:
         mytime = time.localtime()
 
         # get the current hour and minute from the mytime tuple we just created
-        currenthour = mytime[3] # note to self: self, remember we can also use mytime.tm_hour
+        currenthour = mytime[3] # note to myself: self, remember we can also use mytime.tm_hour
         currentmin = mytime[4]  # and mytime.tm_min here
 
         # Get the values of what we need to manipulate. we will use them in further conditions to check what theme is active across system and apps
@@ -49,7 +49,7 @@ try:
             # Then if we work at night we set the dark theme
             # And last, we set the light theme
             
-            if apps_theme[0] == 0 and not work_night: # using dark theme and not working at night? Set  theme
+            if apps_theme[0] == 0 and not work_night: # using dark theme and not working at night? Set light theme
                 wr.SetValueEx(openkey, "AppsUseLightTheme", 0, wr.REG_DWORD, 1)
             elif apps_theme[0] == 1 and work_night: # using light theme and working at night? set dark theme
                 wr.SetValueEx(openkey, "AppsUseLightTheme", 0, wr.REG_DWORD, 0)
