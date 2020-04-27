@@ -16,6 +16,21 @@ dark_active_minute = 30 # integer between 0-59
 # do you work at night? If True we will set the light theme at night and dark theme during the day. We gotcha Nosferatu! 
 work_night = False
 
+### OPTIONS FILE ###
+try:
+    #opts=open("conf.conf", "r")
+    # Then we read the file
+    # instructions to read the file go here
+    pass
+except IOError:
+    # open the options dialog to get the variables
+    #opts_diag()
+    # Then we read the file
+    pass
+finally:
+    #opts.close()
+    pass
+
 # Create the access point to modify the registry
 myregistry = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
 openkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_ALL_ACCESS) 
