@@ -14,3 +14,6 @@ print(type(opts["work_night"]))
 
 # Save a dictionary to a file
 # https://pythonspot.com/save-a-dictionary-to-a-file/
+
+# How to Check if a File or Directory Exists in Python
+# https://linuxize.com/post/python-check-if-file-exists/ 

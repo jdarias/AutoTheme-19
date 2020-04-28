@@ -4,6 +4,8 @@
 # import what we need first.
 import winreg as wr
 import time
+import ast
+import opts
 
 # This is the time when the light theme will be activated (AKA. Sunrise). WARNING: no trailing zeroes!
 light_active_hour = 6 # integer between 0-23
@@ -18,15 +20,25 @@ work_night = False
 
 ### OPTIONS FILE ###
 try:
-    #opts=open("conf.conf", "r")
-    # Then we read the file
-    # instructions to read the file go here
-    pass
+    openconf=open("conf.conf", "r")
+    contentconf=openconf.read()
+    
+    # prog_options will contain the dictionary with the variables
+    prog_options=ast.literal_eval(contentconf)
+    
+    # what do we have?
+    #print(prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
+    #print(prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
+    #print(prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
+    #print(prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
+    #print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
+    #print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
+
 except IOError:
     # open the options dialog to get the variables
-    #opts_diag()
+    opts.opts_diag()
     # Then we read the file
-    pass
+    
 finally:
     #opts.close()
     pass
