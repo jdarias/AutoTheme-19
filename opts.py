@@ -1,6 +1,27 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter as tk
+import ast
+
+# function to load the config file 
+def load_conf():
+    openconf=open("conf.conf", "r")
+    contentconf=openconf.read()
+    
+    # prog_options will contain the dictionary with the variables
+    global prog_options
+    prog_options=ast.literal_eval(contentconf)
+    
+    # close the file
+    openconf.close()
+
+    # what do we have?
+    print(prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
+    print(prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
+    print(prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
+    print(prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
+    print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
+    print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
 
 # call this when needed
 def opts_diag():
@@ -15,18 +36,17 @@ def opts_diag():
         prog_options={}
 
         #store the options from the widgets into the dictionary
-
         # store the sunrise hour
-        prog_options["light_hour"]=int(spb_sun_hour.get())
+        prog_options["light_hour"]=int(cbx_sun_hour.get())
 
         # store the sunrise minute
-        prog_options["light_minute"]=int(spb_sun_min.get())
+        prog_options["light_minute"]=int(cbx_sun_min.get())
 
         # store the sunset hour
-        prog_options["dark_hour"]=int(spb_moon_hour.get())
+        prog_options["dark_hour"]=int(cbx_moon_hour.get())
 
         # store the sunset minute
-        prog_options["dark_minute"]=int(spb_moon_min.get())
+        prog_options["dark_minute"]=int(cbx_moon_min.get())
 
         # store the use location boolean
         prog_options["use_location"]=bool(use_location.get())
@@ -62,16 +82,29 @@ def opts_diag():
     lbl_imgsun.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
     # the spinbox for the sunrise hour
-    spb_sun_hour=ttk.Spinbox(master=frm_sunrise, from_=0, to=23, width=5)
-    spb_sun_hour.grid(row=1, column=1, padx=10, pady=5)
+    # spb_sun_hour=ttk.Spinbox(master=frm_sunrise, from_=0, to=23, width=5)
+    # spb_sun_hour.grid(row=1, column=1, padx=10, pady=5)
+    
+    # Create lists of numbers to be shown in the combo boxes
+    hourlist=[]
+    for x in range(24):
+        hourlist.append(str(x))
+
+    minlist=[]
+    for x in range(60):
+        minlist.append(str(x))
+
+    # combobox for the sunrise hour
+    cbx_sun_hour=ttk.Combobox(master=frm_sunrise, height=8, width=5, state="readonly", values=hourlist)
+    cbx_sun_hour.grid(row=1, column=1, padx=10, pady=5)
 
     # the label with the : separator
     lbl_sep_sun=ttk.Label(text=" : ", master=frm_sunrise)
     lbl_sep_sun.grid(row=1, column=2)
 
-    # the spinbox for the sunrise minute
-    spb_sun_min=ttk.Spinbox(master=frm_sunrise, from_=0, to=59, width=5)
-    spb_sun_min.grid(row=1, column=3, padx=10, pady=5)
+    # the combobox for the sunrise minute
+    cbx_sun_min=ttk.Combobox(master=frm_sunrise, height=8, width=5, state="readonly", values=minlist)
+    cbx_sun_min.grid(row=1, column=3, padx=10, pady=5)
 
 
     # FRAME: Sunset Hour
@@ -87,17 +120,17 @@ def opts_diag():
     lbl_imgmoon=tk.Label(image=img_moonclear32, master=frm_sunset)
     lbl_imgmoon.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
-    # the spinbox for the sunset hour
-    spb_moon_hour=ttk.Spinbox(master=frm_sunset, from_=0, to=23, width=5)
-    spb_moon_hour.grid(row=1, column=1, padx=10, pady=5)
+    # the combobox for the sunset hour
+    cbx_moon_hour=ttk.Combobox(master=frm_sunset, height=8, width=5, state="readonly", values=hourlist)
+    cbx_moon_hour.grid(row=1, column=1, padx=10, pady=5)
 
     # the label with the : separator
     lbl_sep_moon=ttk.Label(text=" : ", master=frm_sunset)
     lbl_sep_moon.grid(row=1, column=2)
 
-    # the spinbox for the sunrise minute
-    spb_moon_min=ttk.Spinbox(master=frm_sunset, from_=0, to=59, width=5)
-    spb_moon_min.grid(row=1, column=3, padx=10, pady=5)
+    # the combobox for the sunrise minute
+    cbx_moon_min=ttk.Combobox(master=frm_sunset, height=8, width=5, state="readonly", values=minlist)
+    cbx_moon_min.grid(row=1, column=3, padx=10, pady=5)
 
 
     # FRAME: Option checkboxes
@@ -124,11 +157,44 @@ def opts_diag():
     btn_ok.pack(side=tk.RIGHT, padx=10, pady=10)
 
     # Button Cancel
-    btn_cancel=ttk.Button(master=frm_buttons, text="Cancel", command=cancelButton)
+    #btn_cancel=ttk.Button(master=frm_buttons, text="Cancel", command=cancelButton)
     #btn_cancel.grid(row=0, column=3, padx=10, pady=5, sticky="we")
-    btn_cancel.pack(side=tk.RIGHT, padx=10, pady=10)
+    #btn_cancel.pack(side=tk.RIGHT, padx=10, pady=10)
+
+    #set the widgets to the options in the conf file or if it's not made, set defaults
+
+    try:
+        # load the conf, it can be modified. CANCEL button is enabled
+        load_conf()
+
+        # then set each widget to the values we got
+        cbx_sun_hour.set(str(prog_options["light_hour"]))
+        cbx_sun_min.set(str(prog_options["light_minute"]))
+
+        cbx_moon_hour.set(str(prog_options["dark_hour"]))
+        cbx_moon_min.set(str(prog_options["dark_minute"]))
+
+        use_location.set(prog_options["use_location"])
+        work_night.set(prog_options["work_night"])
+        
+        # Button Cancel
+        btn_cancel=ttk.Button(master=frm_buttons, text="Cancel", command=cancelButton)
+        
+    except:
+        # default values when no conf file is present. CANCEL button is disabled
+        cbx_sun_hour.set(hourlist[5])
+        cbx_sun_min.set(minlist[55])
+
+        cbx_moon_hour.set(hourlist[18])
+        cbx_moon_min.set(minlist[15])
+
+        use_location.set(False)
+        work_night.set(False)
+        
+        # DISABLED Button Cancel
+        btn_cancel=ttk.Button(master=frm_buttons, text="Cancel", default=tk.DISABLED, state=tk.DISABLED)
+    
+    finally:
+        btn_cancel.pack(side=tk.RIGHT, padx=10, pady=10)
 
     winOptions.mainloop()
-
-# this must go when we are done
-# opts_diag()

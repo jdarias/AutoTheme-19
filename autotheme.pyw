@@ -4,48 +4,42 @@
 # import what we need first.
 import winreg as wr
 import time
-import ast
 import opts
 
-# This is the time when the light theme will be activated (AKA. Sunrise). WARNING: no trailing zeroes!
-light_active_hour = 6 # integer between 0-23
-light_active_minute = 30 # integer between 0-59
 
-# This is the time when the dark theme will be activated (AKA. Sunset). WARNING: Idem!
-dark_active_hour = 18 # integer between 0-23
-dark_active_minute = 30 # integer between 0-59
 
-# do you work at night? If True we will set the light theme at night and dark theme during the day. We gotcha Nosferatu! 
-work_night = False
-
-### OPTIONS FILE ###
+### OPTIONS FILE LOAD ###
 try:
-    openconf=open("conf.conf", "r")
-    contentconf=openconf.read()
-    
-    # prog_options will contain the dictionary with the variables
-    prog_options=ast.literal_eval(contentconf)
-    
-    # what do we have?
-    #print(prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
-    #print(prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
-    #print(prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
-    #print(prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
-    #print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
-    #print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
+    opts.load_conf()
 
 except IOError:
     # open the options dialog to get the variables
     opts.opts_diag()
+    
     # Then we read the file
+    opts.load_conf()
     
 finally:
-    #opts.close()
+    # So far no need for stuff here
     pass
+
+# This is the time when the light theme will be activated (AKA. Sunrise).
+light_active_hour = opts.prog_options["light_hour"] # integer between 0-23
+light_active_minute = opts.prog_options["light_minute"] # integer between 0-59
+
+# This is the time when the dark theme will be activated (AKA. Sunset).
+dark_active_hour = opts.prog_options["dark_hour"] # integer between 0-23
+dark_active_minute = opts.prog_options["dark_minute"] # integer between 0-59
+
+# do you work at night? If True we will set the light theme at night and dark theme during the day.
+work_night = opts.prog_options["work_night"]
 
 # Create the access point to modify the registry
 myregistry = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
 openkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_ALL_ACCESS) 
+
+# CODE FOR THE TRAY ICON
+####
 
 # try-except to be able to ctrl-c the program if launched from cmd
 try:
@@ -54,8 +48,8 @@ try:
         mytime = time.localtime()
 
         # get the current hour and minute from the mytime tuple we just created
-        currenthour = mytime[3] # note to myself: self, remember we can also use mytime.tm_hour
-        currentmin = mytime[4]  # and mytime.tm_min here
+        currenthour = mytime.tm_hour # note to myself: remember we can use mytime.tm_hour or mytime[3]
+        currentmin = mytime.tm_min  # and mytime.tm_min or mytime[4] here
 
         # Get the values of what we need to manipulate. we will use them in further conditions to check what theme is active across system and apps
         apps_theme = wr.QueryValueEx(openkey, "AppsUseLightTheme")
