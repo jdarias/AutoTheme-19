@@ -9,19 +9,25 @@ import sys
 
 
 def make_me_stop():
+    print("I'm trying to stop")
     icon.stop()
     sys.exit()
-    
-image=Image.open("16/001-sun.png")
+
+icon="16/002-moon.png"
+image=Image.open(icon)
 
 menu=(
-        item("Options", lambda: print("nope")),
+        item("Options", lambda: print("Call options")),
         item("Exit", lambda: make_me_stop())
 )
 
 icon=pystray.Icon("AutoTheme-19", image, "AutoTheme-19", menu)
 icon.run()
 
-#while True:
-#    print("I won't stop")
-#    time.sleep(2)
+try:
+    icon="16/001-sun.png"
+    while True:
+        print("I won't stop")
+        time.sleep(2)
+except (KeyboardInterrupt, SystemExit):
+    print("I stopped!")
