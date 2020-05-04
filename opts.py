@@ -32,7 +32,7 @@ def opts_diag():
         winOptions.destroy()
 
     def okButton():
-        # here we assign the values from the spinboxes to the dictionary variables
+        # here we assign the values from the comboboxes to the dictionary variables
         prog_options={}
 
         #store the options from the widgets into the dictionary
