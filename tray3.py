@@ -1,9 +1,9 @@
 # this one uses infi.systray instead of pystray
 
-from infi.systray import SysTrayIcon
 import time
 import sys
 import threading
+from infi.systray import SysTrayIcon
 
 
 makemestop=False

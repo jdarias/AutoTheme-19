@@ -34,12 +34,23 @@ dark_active_minute = opts.prog_options["dark_minute"] # integer between 0-59
 # do you work at night? If True we will set the light theme at night and dark theme during the day.
 work_night = opts.prog_options["work_night"]
 
-# Create the access point to modify the registry
-myregistry = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
-openkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_ALL_ACCESS) 
 
-# CODE FOR THE TRAY ICON
-####
+# CREATE THE ACCESS POINTS TO MODIFY THE REGISTRY
+
+# myregistry is the registry connection to read from and to modify
+myregistry = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
+
+# openkey is used to read the theme settings as they are.
+openkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_QUERY_VALUE) 
+
+# this function will modify the registry and uses the myregistry access point
+# theme_setting is either "AppsUseLightTheme" or "SystemUsesLightTheme"
+# theme_value is either 1 or 0
+def mod_setting(theme_setting, theme_value):
+    modkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_WRITE) 
+    wr.SetValueEx(modkey, theme_setting, 0, wr.REG_DWORD, theme_value)
+    wr.CloseKey(modkey)
+
 
 # try-except to be able to ctrl-c the program if launched from cmd
 try:
@@ -71,9 +82,9 @@ try:
             # And last, we set the light theme
             
             if apps_theme[0] == 0 and not work_night: # using dark theme and not working at night? Set light theme
-                wr.SetValueEx(openkey, "AppsUseLightTheme", 0, wr.REG_DWORD, 1)
+                mod_setting("AppsUseLightTheme", 1)
             elif apps_theme[0] == 1 and work_night: # using light theme and working at night? set dark theme
-                wr.SetValueEx(openkey, "AppsUseLightTheme", 0, wr.REG_DWORD, 0)
+                mod_setting("AppsUseLightTheme", 0)
             elif apps_theme[0] == 0 and work_night: # using dark theme and working at night? all is ok, do nothing
                 pass
             else: # light theme is already set, do nothing
@@ -85,9 +96,9 @@ try:
             # And last, we set the light theme
 
             if system_theme[0] == 0 and not work_night: # using dark theme and not working at night? Set light theme
-                wr.SetValueEx(openkey, "SystemUsesLightTheme", 0, wr.REG_DWORD, 1)
+                mod_setting("SystemUsesLightTheme", 1)
             elif system_theme[0] == 1 and work_night: # using light theme and working at night? set dark theme
-                wr.SetValueEx(openkey, "SystemUsesLightTheme", 0, wr.REG_DWORD, 0)
+                mod_setting("SystemUsesLightTheme", 0)
             elif system_theme[0] == 0 and work_night: # using dark theme and working at night? all is ok, do nothing
                 pass
             else: # light theme is already set, do nothing
@@ -109,9 +120,9 @@ try:
             # For all else we leave it like it is
             
             if apps_theme[0] == 1 and not work_night: # using light theme and not working at night? Set dark theme
-                wr.SetValueEx(openkey, "AppsUseLightTheme", 0, wr.REG_DWORD, 0)
+                mod_setting("AppsUseLightTheme", 0)
             elif apps_theme[0] == 0 and work_night: # using dark theme and working at night? set light theme
-                wr.SetValueEx(openkey, "AppsUseLightTheme", 0, wr.REG_DWORD, 1)
+                mod_setting("AppsUseLightTheme", 1)
             elif apps_theme[0] == 1 and work_night: # using dark theme and working at night? all is ok, do nothing
                 pass
             else: # light theme is already set, do nothing
@@ -124,9 +135,9 @@ try:
             # For all else we leave it like it is
 
             if system_theme[0] == 1 and not work_night: # using light theme and not working at night? Set dark theme
-                wr.SetValueEx(openkey, "SystemUsesLightTheme", 0, wr.REG_DWORD, 0)
+                mod_setting("SystemUsesLightTheme", 0)
             elif system_theme[0] == 0 and work_night: # using dark theme and working at night? set light theme
-                wr.SetValueEx(openkey, "SystemUsesLightTheme", 0, wr.REG_DWORD, 1)
+                mod_setting("SystemUsesLightTheme", 1)
             elif system_theme[0] == 1 and work_night: # using light theme and working at night? all is ok, do nothing
                 pass
             else: # dark theme is already set, do nothing
@@ -139,5 +150,11 @@ try:
         time.sleep(5)
 
 # yeah this is not that useful if you're using pyw extension to hide the console
-except KeyboardInterrupt:
+except (KeyboardInterrupt, SystemExit):
     print("Program finished")
+    # Place here the code to close the reg object that reads the registry
+    wr.CloseKey(openkey)
+finally:
+    print("Program finished")
+    # Place here the code to close the reg object that reads the registry
+    wr.CloseKey(openkey)
