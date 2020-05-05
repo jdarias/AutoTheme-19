@@ -23,9 +23,9 @@ def load_conf():
     print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
     print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
 
+
 # call this when needed
 def opts_diag():
-
 
     # event handlers
     def cancelButton():
@@ -33,6 +33,7 @@ def opts_diag():
 
     def okButton():
         # here we assign the values from the comboboxes to the dictionary variables
+        global prog_options
         prog_options={}
 
         #store the options from the widgets into the dictionary
