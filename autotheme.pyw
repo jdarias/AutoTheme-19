@@ -26,17 +26,6 @@ finally:
     # So far no need for stuff here
     pass
 
-# This is the time when the light theme will be activated (AKA. Sunrise).
-light_active_hour = opts.prog_options["light_hour"] # integer between 0-23
-light_active_minute = opts.prog_options["light_minute"] # integer between 0-59
-
-# This is the time when the dark theme will be activated (AKA. Sunset).
-dark_active_hour = opts.prog_options["dark_hour"] # integer between 0-23
-dark_active_minute = opts.prog_options["dark_minute"] # integer between 0-59
-
-# do you work at night? If True we will set the light theme at night and dark theme during the day.
-work_night = opts.prog_options["work_night"]
-
 
 # AUXILIARY CODE FOR THE TRAY ICON
 
@@ -92,12 +81,12 @@ def logic_thread():
             # remember if apps_theme[0] == 0 and system_theme[0] == 0 it means we are using the dark theme
 
     #       To activate the light theme we check for 3 scenarios:
-    #       1) currenthour is the same as light_active_hour AND currentmin is equal or later than light_active_minute
-    #       2) currenthour is later than light_active_hour AND earlier than dark_active_hour
-    #       3) currenthour is same as dark_active_hour AND currentmin is earlier than dark_active_minute
+    #       1) currenthour is the same as opts.prog_options["light_hour"] AND currentmin is equal or later than opts.prog_options["light_minute"]
+    #       2) currenthour is later than opts.prog_options["light_hour"] AND earlier than opts.prog_options["dark_hour"]
+    #       3) currenthour is same as opts.prog_options["dark_hour"] AND currentmin is earlier than opts.prog_options["dark_minute"]
     #       if one of them is true, it means we are on light theme time
 
-            if (currenthour == light_active_hour and currentmin >= light_active_minute) or (currenthour > light_active_hour and currenthour < dark_active_hour) or (currenthour == dark_active_hour and currentmin < dark_active_minute):
+            if (currenthour == opts.prog_options["light_hour"] and currentmin >= opts.prog_options["light_minute"]) or (currenthour > opts.prog_options["light_hour"] and currenthour < opts.prog_options["dark_hour"]) or (currenthour == opts.prog_options["dark_hour"] and currentmin < opts.prog_options["dark_minute"]):
                 # we are in the light theme hour range, we do here the registry change.
 
                 # Set the theme for the apps. 
@@ -105,19 +94,19 @@ def logic_thread():
                 # Then if we work at night we set the dark theme
                 # And last, we set the light theme
                 
-                if apps_theme[0] == 0 and not work_night: # using dark theme and not working at night? Set light theme
+                if apps_theme[0] == 0 and not opts.prog_options["work_night"]: # using dark theme and not working at night? Set light theme
                     mod_setting("AppsUseLightTheme", 1)
                     # update the icon
                     icon.update(icon="16/001-sun.ico")
                     icon.update(hover_text="AutoTheme-19: Clear theme, day worker")
 
-                elif apps_theme[0] == 1 and work_night: # using light theme and working at night? set dark theme
+                elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using light theme and working at night? set dark theme
                     mod_setting("AppsUseLightTheme", 0)
                     # update the icon
                     icon.update(icon="16/001-sun2.ico")
                     icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
                     
-                elif apps_theme[0] == 0 and work_night: # using dark theme and working at night? all is ok, do nothing
+                elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? all is ok, do nothing
                     pass
                 else: # light theme is already set, do nothing
                     pass
@@ -127,22 +116,22 @@ def logic_thread():
                 # Then if we work at night we set the dark theme
                 # And last, we set the light theme
 
-                if system_theme[0] == 0 and not work_night: # using dark theme and not working at night? Set light theme
+                if system_theme[0] == 0 and not opts.prog_options["work_night"]: # using dark theme and not working at night? Set light theme
                     mod_setting("SystemUsesLightTheme", 1)
-                elif system_theme[0] == 1 and work_night: # using light theme and working at night? set dark theme
+                elif system_theme[0] == 1 and opts.prog_options["work_night"]: # using light theme and working at night? set dark theme
                     mod_setting("SystemUsesLightTheme", 0)
-                elif system_theme[0] == 0 and work_night: # using dark theme and working at night? all is ok, do nothing
+                elif system_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? all is ok, do nothing
                     pass
                 else: # light theme is already set, do nothing
                     pass
 
     #       If none of that is true we check for other 3 cases:
-    #       1) currenthour is the same as dark_active_hour AND currentmin is equal or later than dark_active_minute 
-    #       2) currenthour is later than dark_active_hour OR currenthour is earlier than light_active_hour
-    #       3) currenthour is same as light_active_hour AND currentmin is earlier than light_active_minute
+    #       1) currenthour is the same as opts.prog_options["dark_hour"] AND currentmin is equal or later than opts.prog_options["dark_minute"] 
+    #       2) currenthour is later than opts.prog_options["dark_hour"] OR currenthour is earlier than opts.prog_options["light_hour"]
+    #       3) currenthour is same as opts.prog_options["light_hour"] AND currentmin is earlier than opts.prog_options["light_minute"]
     #       if one of these is true, it means we are on dark theme time
 
-            elif (currenthour == dark_active_hour and currentmin >= dark_active_minute) or (currenthour > dark_active_hour or currenthour < light_active_hour) or (currenthour == light_active_hour and currentmin < light_active_minute):
+            elif (currenthour == opts.prog_options["dark_hour"] and currentmin >= opts.prog_options["dark_minute"]) or (currenthour > opts.prog_options["dark_hour"] or currenthour < opts.prog_options["light_hour"]) or (currenthour == opts.prog_options["light_hour"] and currentmin < opts.prog_options["light_minute"]):
                 # we are in the dark theme hour range, we do here the registry change.
 
                 # Set the theme for the apps. 
@@ -151,19 +140,19 @@ def logic_thread():
                 # Then if we use light theme and we work at night we do nothing, it's the way we want
                 # For all else we leave it like it is
                 
-                if apps_theme[0] == 1 and not work_night: # using light theme and not working at night? Set dark theme
+                if apps_theme[0] == 1 and not opts.prog_options["work_night"]: # using light theme and not working at night? Set dark theme
                     mod_setting("AppsUseLightTheme", 0)
                     # update the icon
                     icon.update(icon="16/002-moon2.ico")
                     icon.update(hover_text="AutoTheme-19: Dark theme, day worker")
 
-                elif apps_theme[0] == 0 and work_night: # using dark theme and working at night? set light theme
+                elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? set light theme
                     mod_setting("AppsUseLightTheme", 1)
                     # update the icon
                     icon.update(icon="16/002-moon.ico")
                     icon.update(hover_text="AutoTheme-19: Clear theme, night worker")
 
-                elif apps_theme[0] == 1 and work_night: # using dark theme and working at night? all is ok, do nothing
+                elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using dark theme and working at night? all is ok, do nothing
                     pass
                 else: # light theme is already set, do nothing
                     pass
@@ -174,11 +163,11 @@ def logic_thread():
                 # Then if we use light theme and we work at night we do nothing, it's the way we want
                 # For all else we leave it like it is
 
-                if system_theme[0] == 1 and not work_night: # using light theme and not working at night? Set dark theme
+                if system_theme[0] == 1 and not opts.prog_options["work_night"]: # using light theme and not working at night? Set dark theme
                     mod_setting("SystemUsesLightTheme", 0)
-                elif system_theme[0] == 0 and work_night: # using dark theme and working at night? set light theme
+                elif system_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? set light theme
                     mod_setting("SystemUsesLightTheme", 1)
-                elif system_theme[0] == 1 and work_night: # using light theme and working at night? all is ok, do nothing
+                elif system_theme[0] == 1 and opts.prog_options["work_night"]: # using light theme and working at night? all is ok, do nothing
                     pass
                 else: # dark theme is already set, do nothing
                     pass
