@@ -106,7 +106,7 @@ def logic_thread():
                     icon.update(icon="16/001-sun2.ico")
                     icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
                     
-                elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? all is ok, do nothing
+                elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme (during daytime) and working at night? all is ok, do nothing
                     pass
                 else: # light theme is already set, do nothing
                     pass
@@ -152,10 +152,16 @@ def logic_thread():
                     icon.update(icon="16/002-moon.ico")
                     icon.update(hover_text="AutoTheme-19: Clear theme, night worker")
 
-                elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using dark theme and working at night? all is ok, do nothing
-                    pass
-                else: # light theme is already set, do nothing
-                    pass
+                elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using clear theme (at nighttime) and working at night? all is ok, do nothing
+                    # update the icon
+                    icon.update(icon="16/002-moon.ico")
+                    icon.update(hover_text="AutoTheme-19: Clear theme, night worker")
+                    print("night case 1: clear theme at night")
+                else: # dark theme is already set, do nothing
+                    # update the icon
+                    icon.update(icon="16/002-moon2.ico")
+                    icon.update(hover_text="AutoTheme-19: Dark theme, day worker")
+                    print("night case 2: dark theme at night")
 
                 # Set the theme for the system. 
                 # First we check if the theme is light and if we are not working at night. If this is the case, we set the dark theme
@@ -197,12 +203,16 @@ def logic_thread():
 
 # this is the main thread
 if __name__=="__main__":
-    mylogic=threading.Thread(target=logic_thread)
-    mylogic.start()
 
     menu_options=(
             ("Options", None, call_opts_tray),
     )
 
     icon=SysTrayIcon("16/001-sun.ico", "AutoTheme-19", menu_options, on_quit=make_me_stop)
+    
+    # Start the logic thread after defining the icon, because the logic thread needs to update the icon.
+    mylogic=threading.Thread(target=logic_thread)
+    mylogic.start()
+    
+    # now we start the tray icon
     icon.start()
