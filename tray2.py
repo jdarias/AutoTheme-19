@@ -6,7 +6,7 @@ import sys
 import threading
 
 #print(dir(Image))
-#print(dir(pystray.Icon))
+print(dir(pystray.Icon))
 
 makemestop=False
 icon="16/002-moon.png"
@@ -19,9 +19,9 @@ def make_me_stop():
     print(makemestop)
     print("did i stop?")
     my_x.join()
-    icon.stop()
     print("I STOPPED!")
-    sys.exit()
+    icon.stop()
+    #sys.exit()
 
 # This must go into another thread
 def myloop():
@@ -32,6 +32,8 @@ def myloop():
             print("I won't stop - ", makemestop)
             time.sleep(2)
     except SystemExit:
+        pass
+    finally:
         print("yass... I really stopped")
 
 # this is the main thread
