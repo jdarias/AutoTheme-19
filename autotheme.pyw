@@ -1,4 +1,4 @@
-# Since we are all confined I decided to learn python during the zombie apocalypse.
+# Since we are all confined I decided to learn python during the lockdown.
 # This script changes the windows theme according to a specific hour/minute
 
 # import what we need first.
@@ -107,9 +107,15 @@ def logic_thread():
                     icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
                     
                 elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme (during daytime) and working at night? all is ok, do nothing
-                    pass
+                    # update the icon
+                    icon.update(icon="16/001-sun2.ico")
+                    icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
+                    print("day case 1: dark theme, working at night")
                 else: # light theme is already set, do nothing
-                    pass
+                    # update the icon
+                    icon.update(icon="16/001-sun.ico")
+                    icon.update(hover_text="AutoTheme-19: Clear theme, day worker")
+                    print("day case 2: clear theme, working by day")
 
                 # Set the theme for the system. 
                 # First we check if the theme is dark and if we are not working at night. If this is the case, we set the light theme
