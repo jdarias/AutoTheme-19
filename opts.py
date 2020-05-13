@@ -83,13 +83,13 @@ def load_conf():
         calc_location()
         #write_conf()
 
-    # what do we have?
-    #print(prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
-    #print(prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
-    #print(prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
-    #print(prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
-    #print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
-    #print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
+    # what do we have in prog_options?
+    print("light_hour: ", prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
+    print("light_minute: ", prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
+    print("dark_hour: ", prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
+    print("dark_minute: ", prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
+    print("use_location: ", prog_options["use_location"], " - ", type(prog_options["use_location"]))
+    print("work_night: ", prog_options["work_night"], " - ", type(prog_options["work_night"]))
 
 
 # THE OPTIONS DIALOG. GETS CALLED IF THERE'S NO CONFIGURATION OR FROM THE TRAY MENU
@@ -235,7 +235,7 @@ def opts_diag():
     chkb_work_night.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
     # checkbox for "use my location"
-    chkb_use_location=ttk.Checkbutton(master=frm_checkboxes, onvalue=True, offvalue=False, text="Use my location to calculate sunrise/sunset hours", variable=use_location, command=set_hours)
+    chkb_use_location=ttk.Checkbutton(master=frm_checkboxes, onvalue=True, offvalue=False, text="Use my location to calculate sunrise/sunset hours", variable=use_location, command=ticked_location)
     chkb_use_location.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
 
     # FRAME: Buttons
