@@ -93,7 +93,7 @@ def opts_diag():
 
     minlist=[]
     for x in range(60):
-        minlist.append(str(x))
+        minlist.append(str(x).zfill(2))
 
     # combobox for the sunrise hour
     cbx_sun_hour=ttk.Combobox(master=frm_sunrise, height=8, width=5, state="readonly", values=hourlist)
@@ -170,10 +170,10 @@ def opts_diag():
 
         # then set each widget to the values we got
         cbx_sun_hour.set(str(prog_options["light_hour"]))
-        cbx_sun_min.set(str(prog_options["light_minute"]))
+        cbx_sun_min.set(str(prog_options["light_minute"]).zfill(2))
 
         cbx_moon_hour.set(str(prog_options["dark_hour"]))
-        cbx_moon_min.set(str(prog_options["dark_minute"]))
+        cbx_moon_min.set(str(prog_options["dark_minute"]).zfill(2))
 
         use_location.set(prog_options["use_location"])
         work_night.set(prog_options["work_night"])
