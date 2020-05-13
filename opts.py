@@ -1,7 +1,70 @@
 from tkinter import *
-from tkinter import ttk
 import tkinter as tk
+from tkinter import ttk
 import ast
+
+
+
+# check for internet. Source: https://www.youtube.com/watch?time_continue=140&v=tTJJ1Ojr9VY
+def is_internet():
+    from urllib.request import urlopen
+    
+    try:
+        urlopen("https://www.google.com", timeout=1)
+        return True
+
+    except urllib.error.URLError as Error:
+        print(Error)
+        return False
+
+# save the configuration as a dictionary to a file
+def write_conf():
+    openconf=open("conf.conf", "w")
+    openconf.write(str(prog_options))
+    openconf.close()
+
+# This function calculates the sunrise/sunset hours using geocoder and suntime
+def calc_location():
+    import geocoder
+    from suntime import Sun, SunTimeException
+    from tkinter import messagebox
+    
+    if is_internet()==True:
+        mygeo=geocoder.ip("me") 
+
+        print("lat:", mygeo.latlng[0])
+        print("lng:", mygeo.latlng[1])
+
+        sun=Sun(mygeo.latlng[0],mygeo.latlng[1])
+
+        # calculate the local sunrise and sunset
+        c_sunrise = sun.get_local_sunrise_time()
+        c_sunset = sun.get_local_sunset_time()
+
+        print(c_sunrise.strftime("%H"), ":", c_sunrise.strftime("%M"))
+        print(c_sunset.strftime("%H"), ":", c_sunset.strftime("%M"))
+        
+        #store the options from the calculation into the dictionary
+        # the prog_options is already loaded. We call this from load_conf
+        global prog_options
+
+        # store the sunrise hour
+        prog_options["light_hour"]=int(c_sunrise.strftime("%H"))
+
+        # store the sunrise minute
+        prog_options["light_minute"]=int(c_sunrise.strftime("%M"))
+
+        # store the sunset hour
+        prog_options["dark_hour"]=int(c_sunset.strftime("%H"))
+
+        # store the sunset minute
+        prog_options["dark_minute"]=int(c_sunset.strftime("%M"))
+    else:
+        rt=Tk()
+        rt.withdraw()
+        messagebox.showinfo("Location not available", "Internet connection is needed to calculate the sunrise and sunset hours.")
+
+
 
 # function to load the config file 
 def load_conf():
@@ -14,17 +77,22 @@ def load_conf():
     
     # close the file
     openconf.close()
+    
+    # if user set location, perform the calculation
+    if prog_options["use_location"]==True:
+        calc_location()
+        #write_conf()
 
     # what do we have?
-    print(prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
-    print(prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
-    print(prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
-    print(prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
-    print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
-    print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
+    #print(prog_options["light_hour"], " - ", type(prog_options["light_hour"]))
+    #print(prog_options["light_minute"], " - ", type(prog_options["light_minute"]))
+    #print(prog_options["dark_hour"], " - ", type(prog_options["dark_hour"]))
+    #print(prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
+    #print(prog_options["use_location"], " - ", type(prog_options["use_location"]))
+    #print(prog_options["work_night"], " - ", type(prog_options["work_night"]))
 
 
-# call this when needed
+# THE OPTIONS DIALOG. GETS CALLED IF THERE'S NO CONFIGURATION OR FROM THE TRAY MENU
 def opts_diag():
 
     # event handlers
@@ -55,13 +123,36 @@ def opts_diag():
         # store the work at night boolean
         prog_options["work_night"]=bool(work_night.get())
         
-        #save the dictionary to a file
-        openconf=open("conf.conf", "w")
-        openconf.write(str(prog_options))
-        openconf.close()
-        
+        # invoke the save conf function
+        write_conf()
+
+        # finally close the window
         winOptions.destroy()
 
+
+    # set the widgets to the values in prog_options
+    def set_widgets():
+        cbx_sun_hour.set(str(prog_options["light_hour"]))
+        cbx_sun_min.set(str(prog_options["light_minute"]).zfill(2))
+
+        cbx_moon_hour.set(str(prog_options["dark_hour"]))
+        cbx_moon_min.set(str(prog_options["dark_minute"]).zfill(2))
+
+        use_location.set(prog_options["use_location"])
+        work_night.set(prog_options["work_night"])
+
+    def set_hours():
+        cbx_sun_hour.set(str(prog_options["light_hour"]))
+        cbx_sun_min.set(str(prog_options["light_minute"]).zfill(2))
+
+        cbx_moon_hour.set(str(prog_options["dark_hour"]))
+        cbx_moon_min.set(str(prog_options["dark_minute"]).zfill(2))
+        
+    # change the comboboxes to disabled when the user selects the location checkbox
+    def ticked_location():
+        calc_location()
+        set_hours()
+    
     winOptions=Tk()
     winOptions.title("AutoTheme-19 Options")
     
@@ -144,7 +235,7 @@ def opts_diag():
     chkb_work_night.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
     # checkbox for "use my location"
-    chkb_use_location=ttk.Checkbutton(master=frm_checkboxes, onvalue=True, offvalue=False, text="Use my location to calculate sunrise/sunset hours", variable=use_location)
+    chkb_use_location=ttk.Checkbutton(master=frm_checkboxes, onvalue=True, offvalue=False, text="Use my location to calculate sunrise/sunset hours", variable=use_location, command=set_hours)
     chkb_use_location.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
 
     # FRAME: Buttons
@@ -165,19 +256,12 @@ def opts_diag():
     #set the widgets to the options in the conf file or if it's not made, set defaults
 
     try:
-        # load the conf, it can be modified. CANCEL button is enabled
+        # load the conf when we invoke the dialog, it can be modified. CANCEL button is enabled
         load_conf()
 
         # then set each widget to the values we got
-        cbx_sun_hour.set(str(prog_options["light_hour"]))
-        cbx_sun_min.set(str(prog_options["light_minute"]).zfill(2))
+        set_widgets()
 
-        cbx_moon_hour.set(str(prog_options["dark_hour"]))
-        cbx_moon_min.set(str(prog_options["dark_minute"]).zfill(2))
-
-        use_location.set(prog_options["use_location"])
-        work_night.set(prog_options["work_night"])
-        
         # Button Cancel
         btn_cancel=ttk.Button(master=frm_buttons, text="Cancel", command=cancelButton)
         
