@@ -7,6 +7,7 @@ import ast
 
 # check for internet. Source: https://www.youtube.com/watch?time_continue=140&v=tTJJ1Ojr9VY
 def is_internet():
+    import urllib
     from urllib.request import urlopen
     
     try:
@@ -27,7 +28,6 @@ def write_conf():
 def calc_location():
     import geocoder
     from suntime import Sun, SunTimeException
-    from tkinter import messagebox
     
     if is_internet()==True:
         mygeo=geocoder.ip("me") 
@@ -59,11 +59,6 @@ def calc_location():
 
         # store the sunset minute
         prog_options["dark_minute"]=int(c_sunset.strftime("%M"))
-    else:
-        rt=Tk()
-        rt.withdraw()
-        messagebox.showinfo("Location not available", "Internet connection is needed to calculate the sunrise and sunset hours.")
-
 
 
 # function to load the config file 
@@ -150,8 +145,16 @@ def opts_diag():
         
     # change the comboboxes to disabled when the user selects the location checkbox
     def ticked_location():
-        calc_location()
-        set_hours()
+        from tkinter import messagebox
+        
+        if prog_options["use_location"]==False and is_internet()==False:
+            rt=Tk()
+            rt.withdraw()
+            messagebox.showinfo("Location not available", "Internet connection is needed to calculate the sunrise and sunset hours.")
+            rt.destroy()
+        elif prog_options["use_location"]==False:
+            calc_location()
+            set_hours()
     
     winOptions=Tk()
     winOptions.title("AutoTheme-19 Options")

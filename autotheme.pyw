@@ -110,12 +110,12 @@ def logic_thread():
                     # update the icon
                     icon.update(icon="16/001-sun2.ico")
                     icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
-                    print("day case 1: dark theme, working at night")
+                    #print("day case 1: dark theme, working at night")
                 else: # light theme is already set, do nothing
                     # update the icon
                     icon.update(icon="16/001-sun.ico")
                     icon.update(hover_text="AutoTheme-19: Clear theme, day worker")
-                    print("day case 2: clear theme, working by day")
+                    #print("day case 2: clear theme, working by day")
 
                 # Set the theme for the system. 
                 # First we check if the theme is dark and if we are not working at night. If this is the case, we set the light theme
@@ -162,12 +162,12 @@ def logic_thread():
                     # update the icon
                     icon.update(icon="16/002-moon.ico")
                     icon.update(hover_text="AutoTheme-19: Clear theme, night worker")
-                    print("night case 1: clear theme at night")
+                    #print("night case 1: clear theme at night")
                 else: # dark theme is already set, do nothing
                     # update the icon
                     icon.update(icon="16/002-moon2.ico")
                     icon.update(hover_text="AutoTheme-19: Dark theme, day worker")
-                    print("night case 2: dark theme at night")
+                    #print("night case 2: dark theme at night")
 
                 # Set the theme for the system. 
                 # First we check if the theme is light and if we are not working at night. If this is the case, we set the dark theme
