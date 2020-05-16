@@ -63,6 +63,15 @@ def mod_setting(theme_setting, theme_value):
     wr.SetValueEx(modkey, theme_setting, 0, wr.REG_DWORD, theme_value)
     wr.CloseKey(modkey)
 
+# This function updates the icon if it needs to be updated
+# new_icon is string pointing to the file
+# new_text is string 
+def update_icon(new_icon, new_text):
+    if icon._icon!=new_icon or icon._hover_text!=new_text:
+        # update the icon
+        icon.update(icon=new_icon, hover_text=new_text)
+
+
 # All of this goes into a thread
 def logic_thread():
     # try-except to be able to ctrl-c the program if launched from cmd
@@ -89,7 +98,7 @@ def logic_thread():
             if (currenthour == opts.prog_options["light_hour"] and currentmin >= opts.prog_options["light_minute"]) or (currenthour > opts.prog_options["light_hour"] and currenthour < opts.prog_options["dark_hour"]) or (currenthour == opts.prog_options["dark_hour"] and currentmin < opts.prog_options["dark_minute"]):
                 # we are in the light theme hour range, we do here the registry change.
 
-                # Set the theme for the apps. 
+                # Set the theme for the apps.
                 # First we check if the theme is dark and if we are not working at night. If this is the case, we set the light theme
                 # Then if we work at night we set the dark theme
                 # And last, we set the light theme
@@ -97,25 +106,21 @@ def logic_thread():
                 if apps_theme[0] == 0 and not opts.prog_options["work_night"]: # using dark theme and not working at night? Set light theme
                     mod_setting("AppsUseLightTheme", 1)
                     # update the icon
-                    icon.update(icon="16/001-sun.ico")
-                    icon.update(hover_text="AutoTheme-19: Clear theme, day worker")
+                    update_icon("16/001-sun.ico", "AutoTheme-19: Clear theme, day worker")
 
                 elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using light theme and working at night? set dark theme
                     mod_setting("AppsUseLightTheme", 0)
                     # update the icon
-                    icon.update(icon="16/001-sun2.ico")
-                    icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
+                    update_icon("16/001-sun2.ico", "AutoTheme-19: Dark theme, night worker")
                     
                 elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme (during daytime) and working at night? all is ok, do nothing
                     # update the icon
-                    icon.update(icon="16/001-sun2.ico")
-                    icon.update(hover_text="AutoTheme-19: Dark theme, night worker")
-                    #print("day case 1: dark theme, working at night")
+                    update_icon("16/001-sun2.ico", "AutoTheme-19: Dark theme, night worker")
+                    print("day case 1: dark theme, working at night")
                 else: # light theme is already set, do nothing
                     # update the icon
-                    icon.update(icon="16/001-sun.ico")
-                    icon.update(hover_text="AutoTheme-19: Clear theme, day worker")
-                    #print("day case 2: clear theme, working by day")
+                    update_icon("16/001-sun.ico", "AutoTheme-19: Clear theme, day worker")
+                    print("day case 2: clear theme, working by day")
 
                 # Set the theme for the system. 
                 # First we check if the theme is dark and if we are not working at night. If this is the case, we set the light theme
@@ -149,25 +154,21 @@ def logic_thread():
                 if apps_theme[0] == 1 and not opts.prog_options["work_night"]: # using light theme and not working at night? Set dark theme
                     mod_setting("AppsUseLightTheme", 0)
                     # update the icon
-                    icon.update(icon="16/002-moon2.ico")
-                    icon.update(hover_text="AutoTheme-19: Dark theme, day worker")
+                    update_icon("16/002-moon2.ico", "AutoTheme-19: Dark theme, day worker")
 
                 elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? set light theme
                     mod_setting("AppsUseLightTheme", 1)
                     # update the icon
-                    icon.update(icon="16/002-moon.ico")
-                    icon.update(hover_text="AutoTheme-19: Clear theme, night worker")
+                    update_icon("16/002-moon.ico", "AutoTheme-19: Clear theme, night worker")
 
                 elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using clear theme (at nighttime) and working at night? all is ok, do nothing
                     # update the icon
-                    icon.update(icon="16/002-moon.ico")
-                    icon.update(hover_text="AutoTheme-19: Clear theme, night worker")
-                    #print("night case 1: clear theme at night")
+                    update_icon("16/002-moon.ico", "AutoTheme-19: Clear theme, night worker")
+                    print("night case 1: clear theme at night")
                 else: # dark theme is already set, do nothing
                     # update the icon
-                    icon.update(icon="16/002-moon2.ico")
-                    icon.update(hover_text="AutoTheme-19: Dark theme, day worker")
-                    #print("night case 2: dark theme at night")
+                    update_icon("16/002-moon2.ico", "AutoTheme-19: Dark theme, day worker")
+                    print("night case 2: dark theme at night")
 
                 # Set the theme for the system. 
                 # First we check if the theme is light and if we are not working at night. If this is the case, we set the dark theme

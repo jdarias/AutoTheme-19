@@ -34,21 +34,13 @@ def myloop():
             icon.update(hover_text="Sun Icon, day version")
             time.sleep(3)
 
-            icon.update(icon="16/001-sun2.ico")
-            icon.update(hover_text="Sun Icon, night version")
-            time.sleep(3)
-
             icon.update(icon="16/002-moon.ico")
             icon.update(hover_text="Moon Icon, day version")
             time.sleep(3)
             
-            icon.update(icon="16/002-moon2.ico")
-            icon.update(hover_text="Moon Icon, night version")
-            time.sleep(3)
-            
             if makemestop==True:
                 break
-    except:
+    except KeyboardInterrupt:
         pass
 
     finally:
@@ -67,3 +59,4 @@ if __name__=="__main__":
 
     icon=SysTrayIcon("16/001-sun.ico", "My icon title", menu_options, on_quit=make_me_stop)
     icon.start()
+    print(icon._icon)
