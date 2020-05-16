@@ -1,3 +1,11 @@
+"""
+as of 16/05/2020 pystray does not support icon updates,
+that's why i'm not using it in autotheme.
+There's also the issue with PIL dependency
+
+Too bad since infi.systray has its own issues
+"""
+
 import pystray
 from PIL import Image
 from pystray import MenuItem as item
@@ -9,7 +17,7 @@ import threading
 print(dir(pystray.Icon))
 
 makemestop=False
-icon="16/002-moon.png"
+icon_img="16/002-moon.png"
 
 # the function to quit the program
 def make_me_stop():
@@ -26,11 +34,12 @@ def make_me_stop():
 # This must go into another thread
 def myloop():
     try:
-        global icon
-        icon="16/001-sun.png"
+        global icon_img
+        icon_img="16/001-sun.png"
         while makemestop==False:
             print("I won't stop - ", makemestop)
             time.sleep(2)
+
     except SystemExit:
         pass
     finally:
@@ -41,7 +50,7 @@ if __name__=="__main__":
     my_x=threading.Thread(target=myloop)
     my_x.start()
 
-    image=Image.open(icon)
+    image=Image.open(icon_img)
 
     menu=(
             item("Options", lambda: print("Call options")),
