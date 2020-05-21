@@ -5,17 +5,15 @@ import ast
 
 
 
-# check for internet. Source: https://www.youtube.com/watch?time_continue=140&v=tTJJ1Ojr9VY
-def is_internet():
-    import urllib
-    from urllib.request import urlopen
-    
+# check for internet. Source: https://stackoverflow.com/questions/3764291/checking-network-connection/#answer-33117579 
+def is_internet(host="8.8.8.8", port=53, timeout=3):
+    import socket
     try:
-        urlopen("https://www.google.com", timeout=1)
+        socket.setdefaulttimeout(timeout)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
-
-    except urllib.error.URLError as Error:
-        print(Error)
+    except socket.error as ex:
+        print(ex)
         return False
 
 # save the configuration as a dictionary to a file
