@@ -89,6 +89,9 @@ def load_conf():
 def opts_diag():
 
     # event handlers
+    def cancelKey(event):
+        winOptions.destroy()
+
     def cancelButton():
         winOptions.destroy()
 
@@ -141,7 +144,7 @@ def opts_diag():
         cbx_moon_hour.set(str(prog_options["dark_hour"]))
         cbx_moon_min.set(str(prog_options["dark_minute"]).zfill(2))
         
-    # change the comboboxes to disabled when the user selects the location checkbox
+    # show a message when the user selects the location checkbox and we are offline
     def ticked_location():
         from tkinter import messagebox
         
@@ -156,7 +159,10 @@ def opts_diag():
     
     winOptions=Tk()
     winOptions.title("AutoTheme-19 Options")
-    
+    winOptions.resizable(width=False, height=False)
+    winOptions.focus_force()
+    winOptions.bind("<Escape>", cancelKey)
+
     #BUILD THE CONTROL VARIABLES FOR THE CHECKBOXES: They must be after the window creation "Tk()" and at the same indentation. Otherwise they won't work
     use_location=BooleanVar()
     work_night=BooleanVar()
@@ -283,4 +289,5 @@ def opts_diag():
     finally:
         btn_cancel.pack(side=tk.RIGHT, padx=10, pady=10)
 
+    winOptions.iconbitmap("icons/16.ico")
     winOptions.mainloop()
