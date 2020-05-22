@@ -168,22 +168,14 @@ def opts_diag():
     work_night=BooleanVar()
 
     # FRAME: Sunrise Hour
-    frm_sunrise=tk.Frame(master=winOptions, borderwidth=0) # tk.Frame admits bg="#hex"
-    frm_sunrise.pack(fill=tk.X, padx=5, pady=5)
-
-    # the label "Sunrise Hour"
-    lbl_sunrise=ttk.Label(master=frm_sunrise, text="Sunrise Hour")
-    lbl_sunrise.grid(row=0, column=0, padx=10, pady=5, sticky="nw")
+    frm_sunrise=ttk.LabelFrame(master=winOptions, text="Sunrise Hour") # tk.Frame admits bg="#hex"
+    frm_sunrise.pack(fill=tk.X, padx=10, pady=10)
 
     # the image for the sun (clear ui version)
     img_sunclear32=tk.PhotoImage(file="icons/32/001-sun.png")
     lbl_imgsun=tk.Label(image=img_sunclear32, master=frm_sunrise)
     lbl_imgsun.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
-    # the spinbox for the sunrise hour
-    # spb_sun_hour=ttk.Spinbox(master=frm_sunrise, from_=0, to=23, width=5)
-    # spb_sun_hour.grid(row=1, column=1, padx=10, pady=5)
-    
     # Create lists of numbers to be shown in the combo boxes
     hourlist=[]
     for x in range(24):
@@ -191,7 +183,7 @@ def opts_diag():
 
     minlist=[]
     for x in range(60):
-        minlist.append(str(x).zfill(2))
+        minlist.append(str(x).zfill(2)) # zfill appends trailing zeroes for the minutes
 
     # combobox for the sunrise hour
     cbx_sun_hour=ttk.Combobox(master=frm_sunrise, height=8, width=5, state="readonly", values=hourlist)
@@ -207,12 +199,8 @@ def opts_diag():
 
 
     # FRAME: Sunset Hour
-    frm_sunset=ttk.Frame(master=winOptions, borderwidth=0)
-    frm_sunset.pack(fill=tk.X, padx=5, pady=5)
-
-    # the label "Sunset Hour"
-    lbl_sunset=ttk.Label(master=frm_sunset, text="Sunset Hour")
-    lbl_sunset.grid(row=0, column=0, padx=10, pady=5, sticky="nw")
+    frm_sunset=ttk.LabelFrame(master=winOptions, text="Sunset Hour")
+    frm_sunset.pack(fill=tk.X, padx=10, pady=10)
 
     # the image for the moon (clear ui version)
     img_moonclear32=tk.PhotoImage(file="icons/32/002-moon.png")
@@ -255,13 +243,7 @@ def opts_diag():
     #btn_ok.grid(row=0, column=2, padx=10, pady=5, sticky="we")
     btn_ok.pack(side=tk.RIGHT, padx=10, pady=10)
 
-    # Button Cancel
-    #btn_cancel=ttk.Button(master=frm_buttons, text="Cancel", command=cancelButton)
-    #btn_cancel.grid(row=0, column=3, padx=10, pady=5, sticky="we")
-    #btn_cancel.pack(side=tk.RIGHT, padx=10, pady=10)
-
     #set the widgets to the options in the conf file or if it's not made, set defaults
-
     try:
         # load the conf when we invoke the dialog, it can be modified. CANCEL button is enabled
         load_conf()
