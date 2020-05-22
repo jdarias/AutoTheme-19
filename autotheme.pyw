@@ -4,7 +4,6 @@
 # import what we need first.
 import winreg as wr
 import time
-import sys
 import threading
 from infi.systray import SysTrayIcon
 import opts
@@ -44,7 +43,6 @@ def make_me_stop(icon):
     # Closing sequence
     mylogic.join()
     print("I'M STOPPING!")
-    sys.exit()
 
 
 # CREATE THE ACCESS POINTS TO MODIFY THE REGISTRY
