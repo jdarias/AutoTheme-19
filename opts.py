@@ -170,7 +170,7 @@ def opts_diag():
     lbl_sunrise.grid(row=0, column=0, padx=10, pady=5, sticky="nw")
 
     # the image for the sun (clear ui version)
-    img_sunclear32=tk.PhotoImage(file="32/001-sun.png")
+    img_sunclear32=tk.PhotoImage(file="icons/32/001-sun.png")
     lbl_imgsun=tk.Label(image=img_sunclear32, master=frm_sunrise)
     lbl_imgsun.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
@@ -209,7 +209,7 @@ def opts_diag():
     lbl_sunset.grid(row=0, column=0, padx=10, pady=5, sticky="nw")
 
     # the image for the moon (clear ui version)
-    img_moonclear32=tk.PhotoImage(file="32/002-moon.png")
+    img_moonclear32=tk.PhotoImage(file="icons/32/002-moon.png")
     lbl_imgmoon=tk.Label(image=img_moonclear32, master=frm_sunset)
     lbl_imgmoon.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
