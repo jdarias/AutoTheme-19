@@ -16,18 +16,17 @@ You should have received a copy of the GNU General Public License along with thi
 Monochrome icons can be found in the [Weather icon pack](https://www.flaticon.com/packs/weather-78) made by [Good Ware](https://www.flaticon.com/authors/good-ware) from [Flaticon](https://www.flaticon.com)
 
 ## Third party python libraries used
-[infi.systray](https://github.com/Infinidat/infi.systray)
-[geocoder](https://geocoder.readthedocs.io/)
-[suntime](https://github.com/SatAgro/suntime)
+-[infi.systray](https://github.com/Infinidat/infi.systray)
+-[geocoder](https://geocoder.readthedocs.io/)
+-[suntime](https://github.com/SatAgro/suntime)
 
 ## Python libraries used in this project
-tkinter
-ast
-socket
-winreg
-time
-sys
-threading
+-tkinter
+-ast
+-socket
+-winreg
+-time
+-threading
 
 ## Licensing information
 
