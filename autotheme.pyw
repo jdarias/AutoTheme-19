@@ -103,17 +103,17 @@ def logic_thread():
                 
                 if apps_theme[0] == 0 and not opts.prog_options["work_night"]: # using dark theme and not working at night? Set light theme
                     mod_setting("AppsUseLightTheme", 1)
-                    update_icon("icons/16/001-sun.ico", "AutoTheme-19: Clear theme, day worker")
+                    update_icon("icons/16/B16sun.ico", "AutoTheme-19: Clear theme, day worker")
 
                 elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using light theme and working at night? set dark theme
                     mod_setting("AppsUseLightTheme", 0)
-                    update_icon("icons/16/001-sun2.ico", "AutoTheme-19: Dark theme, night worker")
+                    update_icon("icons/16/W16sun.ico", "AutoTheme-19: Dark theme, night worker")
                     
                 elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme (during daytime) and working at night? all is ok, do nothing
-                    update_icon("icons/16/001-sun2.ico", "AutoTheme-19: Dark theme, night worker")
+                    update_icon("icons/16/W16sun.ico", "AutoTheme-19: Dark theme, night worker")
                     print("day case 1: dark theme, working at night")
                 else: # light theme is already set, do nothing
-                    update_icon("icons/16/001-sun.ico", "AutoTheme-19: Clear theme, day worker")
+                    update_icon("icons/16/B16sun.ico", "AutoTheme-19: Clear theme, day worker")
                     print("day case 2: clear theme, working by day")
 
                 # Set the theme for the system. 
@@ -147,17 +147,17 @@ def logic_thread():
                 
                 if apps_theme[0] == 1 and not opts.prog_options["work_night"]: # using light theme and not working at night? Set dark theme
                     mod_setting("AppsUseLightTheme", 0)
-                    update_icon("icons/16/002-moon2.ico", "AutoTheme-19: Dark theme, day worker")
+                    update_icon("icons/16/W16moon.ico", "AutoTheme-19: Dark theme, day worker")
 
                 elif apps_theme[0] == 0 and opts.prog_options["work_night"]: # using dark theme and working at night? set light theme
                     mod_setting("AppsUseLightTheme", 1)
-                    update_icon("icons/16/002-moon.ico", "AutoTheme-19: Clear theme, night worker")
+                    update_icon("icons/16/B16moon.ico", "AutoTheme-19: Clear theme, night worker")
 
                 elif apps_theme[0] == 1 and opts.prog_options["work_night"]: # using clear theme (at nighttime) and working at night? all is ok, do nothing
-                    update_icon("icons/16/002-moon.ico", "AutoTheme-19: Clear theme, night worker")
+                    update_icon("icons/16/B16moon.ico", "AutoTheme-19: Clear theme, night worker")
                     print("night case 1: clear theme at night")
                 else: # dark theme is already set, do nothing
-                    update_icon("icons/16/002-moon2.ico", "AutoTheme-19: Dark theme, day worker")
+                    update_icon("icons/16/W16moon.ico", "AutoTheme-19: Dark theme, day worker")
                     print("night case 2: dark theme at night")
 
                 # Set the theme for the system. 
@@ -205,7 +205,7 @@ if __name__=="__main__":
             ("Options", None, call_opts_tray),
     )
 
-    icon=SysTrayIcon("icons/16/001-sun.ico", "AutoTheme-19", menu_options, on_quit=make_me_stop)
+    icon=SysTrayIcon("icons/16/B16sun.ico", "AutoTheme-19", menu_options, on_quit=make_me_stop)
     
     # Start the logic thread after defining the icon, because the logic thread needs to update the icon.
     mylogic=threading.Thread(target=logic_thread)
