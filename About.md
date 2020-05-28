@@ -4,7 +4,7 @@
 
 AutoTheme-19 changes the theme on Windows 10 according to sunrise and sunset hours. I worked on this project during the covid-19 lockdown.
  
-Copyright © 2020 Juan Escobar Arias.
+Copyright (c) 2020 Juan Escobar Arias.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
@@ -12,8 +12,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-## Artwork
-Monochrome icons can be found in the [Weather icon pack](https://www.flaticon.com/packs/weather-78) made by [Good Ware](https://www.flaticon.com/authors/good-ware) from [Flaticon](https://www.flaticon.com)
+Icons and programming by Juan Escobar Arias
 
 ## Third party python libraries used
 -[infi.systray](https://github.com/Infinidat/infi.systray)
