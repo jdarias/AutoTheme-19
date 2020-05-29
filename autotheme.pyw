@@ -34,7 +34,11 @@ makemestop=False
 # call the options
 def call_opts_tray(icon):
     opts.opts_diag()
-    
+
+# call the About Box
+def call_about_tray(icon):
+    opts.aboutBox()
+
 # function that will end the program
 def make_me_stop(icon):
     global makemestop
@@ -202,7 +206,8 @@ def logic_thread():
 if __name__=="__main__":
 
     menu_options=(
-            ("Options", None, call_opts_tray),
+            ("Options...", None, call_opts_tray),
+            ("About AutoTheme-19", None, call_about_tray),
     )
 
     icon=SysTrayIcon("icons/16/B16sun.ico", "AutoTheme-19", menu_options, on_quit=make_me_stop)
