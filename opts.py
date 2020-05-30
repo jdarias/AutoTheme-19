@@ -3,8 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 import ast
 
-
-
 # check for internet. Source: https://stackoverflow.com/questions/3764291/checking-network-connection/#answer-33117579 
 def is_internet(host="8.8.8.8", port=53, timeout=3):
     import socket
@@ -330,7 +328,7 @@ def aboutBox():
     frm_donate.pack(fill=tk.X, padx=10, pady=10)
 
     # image and button for donations
-    img_donate=tk.PhotoImage(file="icons/pp/PP_logo.png")
+    img_donate=tk.PhotoImage(file="icons/btn/PP_logo.png")
     btn_donate=tk.Button(master=frm_donate, text="  Donate  ", image=img_donate, compound=tk.LEFT, command=donatebutton)
     btn_donate.pack(side=tk.RIGHT)
 

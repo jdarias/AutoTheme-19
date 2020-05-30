@@ -9,8 +9,23 @@ from infi.systray import SysTrayIcon
 import opts
 
 
+# CREATE THE ACCESS POINTS TO MODIFY THE REGISTRY
 
-### OPTIONS FILE LOAD ###
+# myregistry is the registry connection to read from and to modify
+myregistry = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
+
+# openkey is used to read the theme settings as they are.
+openkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_QUERY_VALUE) 
+
+# this function will modify the registry and uses the myregistry access point
+# theme_setting is either "AppsUseLightTheme" or "SystemUsesLightTheme"
+# theme_value is either 1 or 0
+def mod_setting(theme_setting, theme_value):
+    modkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_WRITE) 
+    wr.SetValueEx(modkey, theme_setting, 0, wr.REG_DWORD, theme_value)
+    wr.CloseKey(modkey)
+
+# OPTIONS FILE LOAD #
 try:
     opts.load_conf()
 
@@ -48,22 +63,18 @@ def make_me_stop(icon):
     mylogic.join()
     print("I'M STOPPING!")
 
-
-# CREATE THE ACCESS POINTS TO MODIFY THE REGISTRY
-
-# myregistry is the registry connection to read from and to modify
-myregistry = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
-
-# openkey is used to read the theme settings as they are.
-openkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_QUERY_VALUE) 
-
-# this function will modify the registry and uses the myregistry access point
-# theme_setting is either "AppsUseLightTheme" or "SystemUsesLightTheme"
-# theme_value is either 1 or 0
-def mod_setting(theme_setting, theme_value):
-    modkey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", 0, wr.KEY_WRITE) 
-    wr.SetValueEx(modkey, theme_setting, 0, wr.REG_DWORD, theme_value)
-    wr.CloseKey(modkey)
+# create or delete the registry entry that will start the program on startup
+def setRunOnStartup(runstart):
+    import os.path
+    
+    startKey = wr.OpenKeyEx(myregistry, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", 0, wr.KEY_WRITE) 
+    
+    if runstart==True:
+        wr.SetValueEx(startKey, "AutoTheme-19", 0, wr.REG_SZ, os.path.abspath(__file__))
+    elif runstart==False:
+        wr.DeleteValue(startKey, "AutoTheme-19")
+    
+    wr.CloseKey(startKey)
 
 # This function updates the icon if it needs to be updated
 # new_icon is string pointing to the file
@@ -86,10 +97,6 @@ def logic_thread():
             currenthour = mytime.tm_hour # note to myself: remember we can use mytime.tm_hour or mytime[3]
             currentmin = mytime.tm_min  # and mytime.tm_min or mytime[4] here
 
-            # Get the values of what we need to manipulate. we will use them in further conditions to check what theme is active across system and apps
-            apps_theme = wr.QueryValueEx(openkey, "AppsUseLightTheme")
-            system_theme = wr.QueryValueEx(openkey, "SystemUsesLightTheme")
-            # remember if apps_theme[0] == 0 and system_theme[0] == 0 it means we are using the dark theme
 
     #       To activate the light theme we check for 3 scenarios:
     #       1) currenthour is the same as opts.prog_options["light_hour"] AND currentmin is equal or later than opts.prog_options["light_minute"]
@@ -99,6 +106,11 @@ def logic_thread():
 
             if (currenthour == opts.prog_options["light_hour"] and currentmin >= opts.prog_options["light_minute"]) or (currenthour > opts.prog_options["light_hour"] and currenthour < opts.prog_options["dark_hour"]) or (currenthour == opts.prog_options["dark_hour"] and currentmin < opts.prog_options["dark_minute"]):
                 # we are in the light theme hour range, we do here the registry change.
+
+                # Get the values of what we need to manipulate. we will use them in further conditions to check what theme is active across system and apps
+                apps_theme = wr.QueryValueEx(openkey, "AppsUseLightTheme")
+                system_theme = wr.QueryValueEx(openkey, "SystemUsesLightTheme")
+                # remember if apps_theme[0] == 0 and system_theme[0] == 0 it means we are using the dark theme
 
                 # Set the theme for the apps.
                 # First we check if the theme is dark and if we are not working at night. If this is the case, we set the light theme
@@ -142,6 +154,11 @@ def logic_thread():
 
             elif (currenthour == opts.prog_options["dark_hour"] and currentmin >= opts.prog_options["dark_minute"]) or (currenthour > opts.prog_options["dark_hour"] or currenthour < opts.prog_options["light_hour"]) or (currenthour == opts.prog_options["light_hour"] and currentmin < opts.prog_options["light_minute"]):
                 # we are in the dark theme hour range, we do here the registry change.
+                
+                # Get the values of what we need to manipulate. we will use them in further conditions to check what theme is active across system and apps
+                apps_theme = wr.QueryValueEx(openkey, "AppsUseLightTheme")
+                system_theme = wr.QueryValueEx(openkey, "SystemUsesLightTheme")
+                # remember if apps_theme[0] == 0 and system_theme[0] == 0 it means we are using the dark theme
 
                 # Set the theme for the apps. 
                 # First we check if the theme is light and if we are not working at night. If this is the case, we set the dark theme
