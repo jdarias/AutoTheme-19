@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import ttk
 import ast
 
+prog_options={}
+
 # check for internet. Source: https://stackoverflow.com/questions/3764291/checking-network-connection/#answer-33117579 
 def is_internet(host="8.8.8.8", port=53, timeout=3):
     import socket
@@ -25,36 +27,35 @@ def calc_location():
     import geocoder
     from suntime import Sun, SunTimeException
     
-    if is_internet()==True:
-        mygeo=geocoder.ip("me") 
+    mygeo=geocoder.ip("me") 
 
-        print("lat:", mygeo.latlng[0])
-        print("lng:", mygeo.latlng[1])
+    print("lat:", mygeo.latlng[0])
+    print("lng:", mygeo.latlng[1])
 
-        sun=Sun(mygeo.latlng[0],mygeo.latlng[1])
+    sun=Sun(mygeo.latlng[0],mygeo.latlng[1])
 
-        # calculate the local sunrise and sunset
-        c_sunrise = sun.get_local_sunrise_time()
-        c_sunset = sun.get_local_sunset_time()
+    # calculate the local sunrise and sunset
+    c_sunrise = sun.get_local_sunrise_time()
+    c_sunset = sun.get_local_sunset_time()
 
-        print(c_sunrise.strftime("%H"), ":", c_sunrise.strftime("%M"))
-        print(c_sunset.strftime("%H"), ":", c_sunset.strftime("%M"))
-        
-        #store the options from the calculation into the dictionary
-        # the prog_options is already loaded. We call this from load_conf
-        global prog_options
+    print(c_sunrise.strftime("%H"), ":", c_sunrise.strftime("%M"))
+    print(c_sunset.strftime("%H"), ":", c_sunset.strftime("%M"))
+    
+    #store the options from the calculation into the dictionary
+    # the prog_options is already loaded. We call this from load_conf
+    global prog_options
 
-        # store the sunrise hour
-        prog_options["light_hour"]=int(c_sunrise.strftime("%H"))
+    # store the sunrise hour
+    prog_options["light_hour"]=int(c_sunrise.strftime("%H"))
 
-        # store the sunrise minute
-        prog_options["light_minute"]=int(c_sunrise.strftime("%M"))
+    # store the sunrise minute
+    prog_options["light_minute"]=int(c_sunrise.strftime("%M"))
 
-        # store the sunset hour
-        prog_options["dark_hour"]=int(c_sunset.strftime("%H"))
+    # store the sunset hour
+    prog_options["dark_hour"]=int(c_sunset.strftime("%H"))
 
-        # store the sunset minute
-        prog_options["dark_minute"]=int(c_sunset.strftime("%M"))
+    # store the sunset minute
+    prog_options["dark_minute"]=int(c_sunset.strftime("%M"))
 
 
 # function to load the config file 
@@ -83,6 +84,7 @@ def load_conf():
     print("dark_minute: ", prog_options["dark_minute"], " - ", type(prog_options["dark_minute"]))
     print("use_location: ", prog_options["use_location"], " - ", type(prog_options["use_location"]))
     print("work_night: ", prog_options["work_night"], " - ", type(prog_options["work_night"]))
+    print("run_startup: ", prog_options["run_startup"], " - ", type(prog_options["run_startup"]))
 
 
 # THE OPTIONS DIALOG. GETS CALLED IF THERE'S NO CONFIGURATION OR FROM THE TRAY MENU
@@ -92,13 +94,15 @@ def opts_diag():
     def cancelKey(event):
         winOptions.destroy()
 
+    def okKey(event):
+        okButton()
+
     def cancelButton():
         winOptions.destroy()
 
     def okButton():
         # here we assign the values from the comboboxes to the dictionary variables
         global prog_options
-        prog_options={}
 
         #store the options from the widgets into the dictionary
         # store the sunrise hour
@@ -119,6 +123,9 @@ def opts_diag():
         # store the work at night boolean
         prog_options["work_night"]=bool(work_night.get())
         
+        # store the run at startup boolean
+        prog_options["run_startup"]=bool(run_startup.get())
+
         # invoke the save conf function
         write_conf()
 
@@ -136,6 +143,7 @@ def opts_diag():
 
         use_location.set(prog_options["use_location"])
         work_night.set(prog_options["work_night"])
+        run_startup.set(prog_options["run_startup"])
 
     def set_hours():
         cbx_sun_hour.set(str(prog_options["light_hour"]))
@@ -148,15 +156,23 @@ def opts_diag():
     def ticked_location():
         from tkinter import messagebox
         
-        if prog_options["use_location"]==False and is_internet()==False:
+        if use_location.get()==True and is_internet()==False:
             rt=Tk()
             rt.withdraw()
             messagebox.showinfo("Location not available", "Internet connection is needed to calculate the sunrise and sunset hours.")
             rt.destroy()
-        elif prog_options["use_location"]==False:
+        elif use_location.get()==True:
             calc_location()
             set_hours()
     
+    # event handler to the run on startup checkbox
+    def ticked_runStartup():
+        if run_startup.get()==True:
+            print("setting a reg entry to run at startup")
+        elif run_startup.get()==False:
+            print("deleting the reg entry so I don't run at startup")
+
+    # options window creation
     winOptions=Tk()
     winOptions.title("AutoTheme-19 Options")
     winOptions.resizable(width=False, height=False)
@@ -166,6 +182,7 @@ def opts_diag():
     #BUILD THE CONTROL VARIABLES FOR THE CHECKBOXES: They must be after the window creation "Tk()" and at the same indentation. Otherwise they won't work
     use_location=BooleanVar()
     work_night=BooleanVar()
+    run_startup=BooleanVar()
 
     # FRAME: Sunrise Hour
     frm_sunrise=ttk.LabelFrame(master=winOptions, text="Sunrise Hour") # tk.Frame admits bg="#hex"
@@ -233,6 +250,10 @@ def opts_diag():
     chkb_use_location=ttk.Checkbutton(master=frm_checkboxes, onvalue=True, offvalue=False, text="Use my location to calculate sunrise/sunset hours", variable=use_location, command=ticked_location)
     chkb_use_location.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
 
+    # checkbox for "run on startup"
+    chkb_run_startup=ttk.Checkbutton(master=frm_checkboxes, onvalue=True, offvalue=False, text="Run on startup", variable=run_startup, command=ticked_runStartup)
+    chkb_run_startup.grid(row=2, column=0, padx=10, pady=5, sticky="ew")
+
     # FRAME: Buttons
     frm_buttons=ttk.Frame(master=winOptions, borderwidth=0)
     frm_buttons.columnconfigure([0], minsize=200)
@@ -288,6 +309,7 @@ def aboutBox():
     winAbout=Tk()
     winAbout.title("About AutoTheme-19")
     winAbout.resizable(width=False, height=False)
+    winAbout.focus_force()
 
     # frame for the app and license info
     frm_app=tk.Frame(master=winAbout)
