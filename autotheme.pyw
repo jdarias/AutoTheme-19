@@ -8,7 +8,10 @@ import threading
 from infi.systray import SysTrayIcon
 # import opts
 import os.path
-import sys
+
+# this is just for logging and debugging
+#import sys 
+#sys.stdout = open('auto.log', 'w')
 
 #---opts
 from tkinter import *
@@ -16,7 +19,6 @@ import tkinter as tk
 from tkinter import ttk
 import ast
 
-sys.stdout = open('auto.log', 'w')
 
 prog_options={}
 
