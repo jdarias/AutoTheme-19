@@ -6,7 +6,6 @@ import winreg as wr
 import time
 import threading
 from infi.systray import SysTrayIcon
-# import opts
 import os.path
 
 # this is just for logging and debugging
@@ -19,11 +18,12 @@ import tkinter as tk
 from tkinter import ttk
 import ast
 
-
+# set to save the program options
 prog_options={}
 
-getpath=os.path.dirname(os.path.abspath(__file__))
-mypath= "\"" + getpath + "\\autotheme.exe\""
+# get the path of the program and save it to mypath
+# getpath=os.path.dirname(os.path.abspath(__file__))
+mypath= "\"" + os.path.dirname(os.path.abspath(__file__)) + "\\autotheme.exe\""
 print(mypath)
 
 # check for internet. Source: https://stackoverflow.com/questions/3764291/checking-network-connection/#answer-33117579 
