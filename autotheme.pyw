@@ -22,7 +22,8 @@ import ast
 
 prog_options={}
 
-mypath= "\"" + os.path.abspath(__file__) + "\""
+getpath=os.path.dirname(os.path.abspath(__file__))
+mypath= "\"" + getpath + "\\autotheme.exe\""
 print(mypath)
 
 # check for internet. Source: https://stackoverflow.com/questions/3764291/checking-network-connection/#answer-33117579 
