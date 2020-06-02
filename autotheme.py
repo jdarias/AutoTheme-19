@@ -6,8 +6,8 @@ import winreg as wr
 import time
 import threading
 from infi.systray import SysTrayIcon
-import os.path
-
+import os.path, sys
+import winshell
 # this is just for logging and debugging
 #import sys 
 #sys.stdout = open('auto.log', 'w')
@@ -23,8 +23,12 @@ prog_options={}
 
 # get the path of the program and save it to mypath
 # getpath=os.path.dirname(os.path.abspath(__file__))
-mypath= "\"" + os.path.dirname(os.path.abspath(__file__)) + "\\autotheme.exe\""
+mypath= "\"" + sys.executable + "\""
 print(mypath)
+
+# get the path of the startup programs in windows. save it to startpath
+startpath=winshell.startup()
+print(startpath)
 
 # check for internet. Source: https://stackoverflow.com/questions/3764291/checking-network-connection/#answer-33117579 
 def is_internet(host="8.8.8.8", port=53, timeout=3):
@@ -189,20 +193,22 @@ def opts_diag():
             print("deactivating location")
     
     # event handler to the run on startup checkbox
-    # create or delete the registry entry that will start the program on startup
     def ticked_runStartup():
-        modstartup = wr.ConnectRegistry(None, wr.HKEY_CURRENT_USER)
-        startKey = wr.OpenKeyEx(modstartup, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", 0, wr.KEY_WRITE) 
-        
         if run_startup.get()==True:
-            wr.SetValueEx(startKey, "AutoTheme-19", 0, wr.REG_SZ, mypath)
-            print("setting a reg entry to run at startup")
+            # based on https://winshell.readthedocs.io/en/latest/shortcuts.html
+            startup_lnk=os.path.join(winshell.startup(), "AutoTheme-19.lnk")
+            with winshell.shortcut(startup_lnk) as link:
+                link.path=sys.executable
+                link.description="AutoTheme-19, a windows desktop time-based theme switcher"
+                link.icon=sys.executable, 0
+                link.working_directory=os.path.dirname(os.path.abspath(__file__))
+            print("setting a shortcut in the startup folder to run at startup")
         elif run_startup.get()==False:
-            wr.DeleteValue(startKey, "AutoTheme-19")
-            print("deleting the reg entry so I don't run at startup")
-        
-        wr.CloseKey(startKey)
-
+            try:
+                winshell.delete_file(os.path.join(winshell.startup(), "AutoTheme-19.lnk"), allow_undo=False, no_confirm=True, silent=True)
+                print("deleting the shortcut in the startup folder so I don't run at startup")
+            except winshell.x_winshell:
+                print("shortcut not found, shrugs")
 
     # options window creation
     winOptions=Tk()
