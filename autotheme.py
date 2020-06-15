@@ -216,6 +216,7 @@ def opts_diag():
     winOptions.resizable(width=False, height=False)
     winOptions.focus_force()
     winOptions.bind("<Escape>", cancelKey)
+    winOptions.bind("<Return>", okKey)
 
     #BUILD THE CONTROL VARIABLES FOR THE CHECKBOXES: They must be after the window creation "Tk()" and at the same indentation. Otherwise they won't work
     use_location=BooleanVar()
