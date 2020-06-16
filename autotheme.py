@@ -211,6 +211,7 @@ def opts_diag():
                 print("shortcut not found, shrugs")
 
     # options window creation
+    global winOptions
     winOptions=Tk()
     winOptions.title("AutoTheme-19 Options")
     winOptions.resizable(width=False, height=False)
@@ -345,6 +346,7 @@ def aboutBox():
         webbrowser.open_new(r"https://www.paypal.me/juandaesarias")
         winAbout.destroy()
 
+    global winAbout
     winAbout=Tk()
     winAbout.title("About AutoTheme-19")
     winAbout.resizable(width=False, height=False)
@@ -447,6 +449,20 @@ def call_about_tray(icon):
 def make_me_stop(icon):
     global makemestop
     makemestop=True
+
+    # Close the options window if it's open
+    try:
+        global winOptions
+        winOptions.destroy()
+    except NameError:
+        print("Options window was not present")
+
+    # Close the About window if open
+    try:
+        global winAbout
+        winAbout.destroy()
+    except NameError:
+        print("About window was not present")
 
     # Closing sequence
     mylogic.join()
