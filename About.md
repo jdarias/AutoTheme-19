@@ -4,9 +4,17 @@ Copyright (c) 2020 Juan Escobar Arias.
 Icons and programming by Juan Escobar Arias
 
 ## Third party python libraries used
--infi.systray <https://github.com/Infinidat/infi.systray>
--geocoder <https://geocoder.readthedocs.io/>
--suntime <https://github.com/SatAgro/suntime>
+-infi.systray by Infinidat 
+ <https://github.com/Infinidat/infi.systray>
+
+-geocoder by Denis Carriere
+ <https://geocoder.readthedocs.io/>
+
+-suntime by SatAgro Sp. z o.o. and contributors
+ <https://github.com/SatAgro/suntime>
+
+-winshell by Tim Golden
+ <http://github.com/tjguk/winshell>
 
 ## Python libraries used in this project
 -tkinter
@@ -15,7 +23,6 @@ Icons and programming by Juan Escobar Arias
 -winreg
 -time
 -threading
--webbrowser
 -webbrowser
 
                     GNU GENERAL PUBLIC LICENSE
