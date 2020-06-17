@@ -8,23 +8,23 @@ a = Analysis(['autotheme.py'],
              binaries=[],
              datas=[
 		# the icons used in the system tray
-	     	("icons/16/B16moon.ico", "icons/16"),
-	     	("icons/16/B16sun.ico", "icons/16"),
-	     	("icons/16/W16moon.ico", "icons/16"),
-	     	("icons/16/W16sun.ico", "icons/16"),
+	     	('icons\\16\\B16moon.ico', 'icons\\16'),
+	     	('icons\\16\\B16sun.ico', 'icons\\16'),
+	     	('icons\\16\\W16moon.ico', 'icons\\16'),
+	     	('icons\\16\\W16sun.ico', 'icons\\16'),
 		# the icons in the options window
-		("icons/32/B32moon.png", "icons/32"),
-		("icons/32/B32sun.png", "icons/32"),
+		('icons\\32\\B32moon.png', 'icons\\32'),
+		('icons\\32\\B32sun.png', 'icons\\32'),
 		# the images in the About box
-		("icons/btn/GitHub-Mark-24px.png", "icons/btn"),
-		("icons/btn/PP_logo.png", "icons/btn"),
+		('icons\\btn\\GitHub-Mark-24px.png', 'icons\\btn'),
+		('icons\\btn\\PP_logo.png', 'icons\\btn'),
 		# App color icon
-		("icons/16.ico", "icons"),
-		("icons/32.ico", "icons"),
+		('icons\\16.ico', 'icons'),
+		('icons\\32.ico', 'icons'),
 		# documentation and license
-		("About.md", "."),
-		("license.txt", "."),
-		("readme.md", ".")
+		('About.md', '.'),
+		('license.txt', '.'),
+		('readme.md', '.')
 	     ],
              hiddenimports=[],
              hookspath=[],
@@ -46,7 +46,8 @@ exe = EXE(pyz,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
-          upx=True,
+          upx=False,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False )
+          console=True,
+	  icon='icons\\16.ico' )
