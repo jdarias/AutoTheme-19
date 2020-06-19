@@ -8,7 +8,7 @@ Icons and programming by Juan Escobar Arias
  <https://github.com/Infinidat/infi.systray>
 
 -geocoder by Denis Carriere
- <https://geocoder.readthedocs.io/>
+ <https://github.com/DenisCarriere/geocoder>
 
 -suntime by SatAgro Sp. z o.o. and contributors
  <https://github.com/SatAgro/suntime>
