@@ -7,24 +7,25 @@ a = Analysis(['autotheme.py'],
              pathex=['D:\\Dropbox\\aaa Proyectos\\Python\\autotheme'],
              binaries=[],
              datas=[
+		# the icons in the options window
+		('icons\\32\\B32moon.png', 'icons\\32'),
+		('icons\\32\\B32sun.png', 'icons\\32'),
+		# App color icon
+		('icons\\16.ico', 'icons'),
+		('icons\\32.ico', 'icons'),
+		('icons\\32.png', 'icons'),
+		# the images in the About box
+		('icons\\btn\\GitHub-Mark-24px.png', 'icons\\btn'),
+		('icons\\btn\\PP_logo.png', 'icons\\btn'),
+		# documentation and license
+		('About.md', '.'),
+		('license.txt', '.'),
+		('readme.md', '.'),
 		# the icons used in the system tray
 	     	('icons\\16\\B16moon.ico', 'icons\\16'),
 	     	('icons\\16\\B16sun.ico', 'icons\\16'),
 	     	('icons\\16\\W16moon.ico', 'icons\\16'),
-	     	('icons\\16\\W16sun.ico', 'icons\\16'),
-		# the icons in the options window
-		('icons\\32\\B32moon.png', 'icons\\32'),
-		('icons\\32\\B32sun.png', 'icons\\32'),
-		# the images in the About box
-		('icons\\btn\\GitHub-Mark-24px.png', 'icons\\btn'),
-		('icons\\btn\\PP_logo.png', 'icons\\btn'),
-		# App color icon
-		('icons\\16.ico', 'icons'),
-		('icons\\32.ico', 'icons'),
-		# documentation and license
-		('About.md', '.'),
-		('license.txt', '.'),
-		('readme.md', '.')
+	     	('icons\\16\\W16sun.ico', 'icons\\16')
 	     ],
              hiddenimports=[],
              hookspath=[],

@@ -12,6 +12,20 @@ import winshell
 #import sys 
 #sys.stdout = open('auto.log', 'w')
 
+# function to make pyinstaller work with the image files
+# https://stackoverflow.com/questions/7674790/bundling-data-files-with-pyinstaller-onefile/7675014#7675014
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+print("DEBUG: ", resource_path("icons\\16\\B16moon.ico"))
+print("DEBUG: ", resource_path("About.md"))
+
 #---opts
 from tkinter import *
 import tkinter as tk
@@ -229,7 +243,7 @@ def opts_diag():
     frm_sunrise.pack(fill=tk.X, padx=10, pady=10)
 
     # the image for the sun (clear ui version)
-    img_sunclear32=tk.PhotoImage(file="icons/32/B32sun.png")
+    img_sunclear32=tk.PhotoImage(file=resource_path("icons\\32\\B32sun.png"))
     lbl_imgsun=tk.Label(image=img_sunclear32, master=frm_sunrise)
     lbl_imgsun.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
@@ -260,7 +274,7 @@ def opts_diag():
     frm_sunset.pack(fill=tk.X, padx=10, pady=10)
 
     # the image for the moon (clear ui version)
-    img_moonclear32=tk.PhotoImage(file="icons/32/B32moon.png")
+    img_moonclear32=tk.PhotoImage(file=resource_path("icons\\32\\B32moon.png"))
     lbl_imgmoon=tk.Label(image=img_moonclear32, master=frm_sunset)
     lbl_imgmoon.grid(row=1, column=0, padx=10, pady=5, sticky="nw")
 
@@ -332,7 +346,7 @@ def opts_diag():
     finally:
         btn_cancel.pack(side=tk.RIGHT, padx=10, pady=10)
 
-    winOptions.iconbitmap("icons/16.ico")
+    winOptions.iconbitmap(resource_path("icons\\16.ico"))
     winOptions.mainloop()
 
 # THE ABOUT BOX
@@ -361,7 +375,7 @@ def aboutBox():
     frm_title.pack(fill=tk.X, padx=10, pady=10)
 
     # 32*32 color icon
-    img_app=tk.PhotoImage(file="icons/32.png")
+    img_app=tk.PhotoImage(file=resource_path("icons\\32.png"))
     lbl_imgapp=tk.Label(image=img_app, master=frm_title)
     lbl_imgapp.grid(column=0, row=0, rowspan=2, sticky="w", padx=10)
 
@@ -370,12 +384,12 @@ def aboutBox():
     lbl_title.grid(column=1, row=0, sticky="w", padx=10)
 
     # version
-    lbl_version=ttk.Label(text="Version 1 \"Let\'s just use a good\'ol integer\"", font=(None, 10, "bold"), master=frm_title)
+    lbl_version=ttk.Label(text="Version 1b \"Let\'s just use a good\'ol integer\"", font=(None, 10, "bold"), master=frm_title)
     lbl_version.grid(column=1, row=1, sticky="w", padx=10)
 
     # info about the program
     aboutstring="AutoTheme-19 changes the theme on Windows 10 according to sunrise and sunset hours. I worked on this project during the covid-19 lockdown.\n\nCopyright \N{COPYRIGHT SIGN} 2020 Juan Escobar Arias.\n\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\nYou should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.\n\nProgramming and Artwork: Juan Escobar Arias."
-    licstring=open("About.md", "r")
+    licstring=open(resource_path("About.md"), "r")
 
     # Text widget with all of that
     txt_mylic=tk.Message(master=frm_app, text=aboutstring) 
@@ -391,11 +405,11 @@ def aboutBox():
     frm_donate.pack(fill=tk.X, padx=10, pady=10)
 
     # image and button for donations
-    img_donate=tk.PhotoImage(file="icons/btn/PP_logo.png")
+    img_donate=tk.PhotoImage(file=resource_path("icons\\btn\\PP_logo.png"))
     btn_donate=tk.Button(master=frm_donate, text="  Donate  ", image=img_donate, compound=tk.LEFT, command=donatebutton)
     btn_donate.pack(side=tk.RIGHT)
 
-    winAbout.iconbitmap("icons/16.ico")
+    winAbout.iconbitmap(resource_path("icons\\16.ico"))
     winAbout.mainloop()
 #---/opts
 
@@ -454,14 +468,14 @@ def make_me_stop(icon):
     try:
         global winOptions
         winOptions.destroy()
-    except NameError:
+    except (TclError, NameError):
         print("Options window was not present")
 
     # Close the About window if open
     try:
         global winAbout
         winAbout.destroy()
-    except NameError:
+    except (TclError, NameError):
         print("About window was not present")
 
     # Closing sequence
@@ -512,17 +526,17 @@ def logic_thread():
                 
                 if apps_theme[0] == 0 and not prog_options["work_night"]: # using dark theme and not working at night? Set light theme
                     mod_setting("AppsUseLightTheme", 1)
-                    update_icon("icons/16/B16sun.ico", "AutoTheme-19: Clear theme, day worker")
+                    update_icon(resource_path("icons\\16\\B16sun.ico"), "AutoTheme-19: Clear theme, day worker")
 
                 elif apps_theme[0] == 1 and prog_options["work_night"]: # using light theme and working at night? set dark theme
                     mod_setting("AppsUseLightTheme", 0)
-                    update_icon("icons/16/W16sun.ico", "AutoTheme-19: Dark theme, night worker")
+                    update_icon(resource_path("icons\\16\\W16sun.ico"), "AutoTheme-19: Dark theme, night worker")
                     
                 elif apps_theme[0] == 0 and prog_options["work_night"]: # using dark theme (during daytime) and working at night? all is ok, do nothing
-                    update_icon("icons/16/W16sun.ico", "AutoTheme-19: Dark theme, night worker")
+                    update_icon(resource_path("icons\\16\\W16sun.ico"), "AutoTheme-19: Dark theme, night worker")
                     #print("day case 1: dark theme, working at night")
                 else: # light theme is already set, do nothing
-                    update_icon("icons/16/B16sun.ico", "AutoTheme-19: Clear theme, day worker")
+                    update_icon(resource_path("icons\\16\\B16sun.ico"), "AutoTheme-19: Clear theme, day worker")
                     #print("day case 2: clear theme, working by day")
 
                 # Set the theme for the system. 
@@ -561,17 +575,17 @@ def logic_thread():
                 
                 if apps_theme[0] == 1 and not prog_options["work_night"]: # using light theme and not working at night? Set dark theme
                     mod_setting("AppsUseLightTheme", 0)
-                    update_icon("icons/16/W16moon.ico", "AutoTheme-19: Dark theme, day worker")
+                    update_icon(resource_path("icons\\16\\W16moon.ico"), "AutoTheme-19: Dark theme, day worker")
 
                 elif apps_theme[0] == 0 and prog_options["work_night"]: # using dark theme and working at night? set light theme
                     mod_setting("AppsUseLightTheme", 1)
-                    update_icon("icons/16/B16moon.ico", "AutoTheme-19: Clear theme, night worker")
+                    update_icon(resource_path("icons\\16\\B16moon.ico"), "AutoTheme-19: Clear theme, night worker")
 
                 elif apps_theme[0] == 1 and prog_options["work_night"]: # using clear theme (at nighttime) and working at night? all is ok, do nothing
-                    update_icon("icons/16/B16moon.ico", "AutoTheme-19: Clear theme, night worker")
+                    update_icon(resource_path("icons\\16\\B16moon.ico"), "AutoTheme-19: Clear theme, night worker")
                     #print("night case 1: clear theme at night")
                 else: # dark theme is already set, do nothing
-                    update_icon("icons/16/W16moon.ico", "AutoTheme-19: Dark theme, day worker")
+                    update_icon(resource_path("icons\\16\\W16moon.ico"), "AutoTheme-19: Dark theme, day worker")
                     #print("night case 2: dark theme at night")
 
                 # Set the theme for the system. 
@@ -620,7 +634,7 @@ if __name__=="__main__":
             ("About AutoTheme-19", None, call_about_tray),
     )
 
-    icon=SysTrayIcon("icons/16/B16sun.ico", "AutoTheme-19", menu_options, on_quit=make_me_stop)
+    icon=SysTrayIcon(resource_path("icons\\16\\B16sun.ico"), "AutoTheme-19", menu_options, on_quit=make_me_stop)
     
     # Start the logic thread after defining the icon, because the logic thread needs to update the icon.
     mylogic=threading.Thread(target=logic_thread)
