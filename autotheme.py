@@ -359,6 +359,10 @@ def aboutBox():
     def donatebutton():
         webbrowser.open_new(r"https://www.paypal.me/juandaesarias")
         winAbout.destroy()
+    
+    def githubbutton():
+        webbrowser.open_new(r"https://github.com/jdarias/AutoTheme-19")
+        winAbout.destroy()
 
     global winAbout
     winAbout=Tk()
@@ -384,7 +388,7 @@ def aboutBox():
     lbl_title.grid(column=1, row=0, sticky="w", padx=10)
 
     # version
-    lbl_version=ttk.Label(text="Version 1b \"Let\'s just use a good\'ol integer\"", font=(None, 10, "bold"), master=frm_title)
+    lbl_version=ttk.Label(text="Version 0.1", font=(None, 10, "bold"), master=frm_title)
     lbl_version.grid(column=1, row=1, sticky="w", padx=10)
 
     # info about the program
@@ -408,6 +412,11 @@ def aboutBox():
     img_donate=tk.PhotoImage(file=resource_path("icons\\btn\\PP_logo.png"))
     btn_donate=tk.Button(master=frm_donate, text="  Donate  ", image=img_donate, compound=tk.LEFT, command=donatebutton)
     btn_donate.pack(side=tk.RIGHT)
+
+    # image and button for the github page
+    img_github=tk.PhotoImage(file=resource_path("icons\\btn\\GitHub-Mark-24px.png"))
+    btn_github=tk.Button(master=frm_donate, text="  GitHub  ", image=img_github, compound=tk.LEFT, command=githubbutton)
+    btn_github.pack(side=tk.LEFT)
 
     winAbout.iconbitmap(resource_path("icons\\16.ico"))
     winAbout.mainloop()

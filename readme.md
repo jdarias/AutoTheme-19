@@ -1,15 +1,15 @@
 ## Autotheme-19
 A Windows app that switches between dark and clear themes (on Windows 10) according to the times of the day you set. 
 
-The app sets the clear theme during the day and the dark theme during the night.
+- The app sets the clear theme during the day and the dark theme during the night.
 
-You can set the sunrise and sunset hours yourself or let the app calculate these times for you.
+- You can set the sunrise and sunset hours yourself or let the app calculate these times for you.
 
-The app can also run at startup so you basically set it and forget it. 
+- The app can also run at startup so you basically set it and forget it. 
 
-No matter when you turn your computer on, or if you haven't used it in a while, the app will change your theme according to its settings. It will also enforce the setting if the theme changes, i.e by another app.
+- If you work at night, you can set the app to set the clear theme at night and the dark theme during the day.
 
-If you work at night, you can set the app to set the clear theme at night and the dark theme during the day.
+It doesn't matter when you turn your computer on, or if you haven't used it in a while, the app will change your theme according to its settings. It will also enforce the setting if the theme changes, i.e by another app.
 
 Written as a Python learning project during the COVID-19 pandemic.
 
@@ -32,7 +32,7 @@ This app does not "call home" nor collects data from you.
 I am not responsible for the development or the funcionality of the libraries linked in this project. Please check the respective documentation and direct inquiries to the relevant project. Everything is open source. You can check the source code of the app and suggest improvements.
 
 ## Setup / Uninstall
-Put the autotheme.exe file anywhere on your system and double clic it.
+Put the autotheme.exe file anywhere on your system and double click it.
 
 On your first run, it will show the options window and you can set the sunrise/sunset hours, if you work at night or if you want to calculate the hours using your location.
 
@@ -57,7 +57,7 @@ If you like this project and it has brought you a smile, please consider making 
 - [winshell](http://github.com/tjguk/winshell>)
 
 ## Python libraries used in this project 
-See [the Python Documentation](https://docs.python.org) for information on them)
+See [the Python Documentation](https://docs.python.org) for information on them
 
 - tkinter
 - ast
