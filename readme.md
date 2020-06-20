@@ -1,6 +1,8 @@
 ## Autotheme-19
 A Windows app that switches between dark and clear themes (on Windows 10) according to the times of the day you set. 
+
 The app sets the clear theme during the day at sunrise, and the dark theme at sunset.
+
 You can set the sunrise and sunset hours yourself or let the app calculate these times for you.
 
 The app can also run at startup so you basically set it and forget it. No matter when you turn on your computer, or if you haven't used it in a while, the app will change your theme according to its settings. It will also enforce the setting if the theme changes, i.e by another app.
@@ -29,14 +31,21 @@ I am not responsible for the development or the funcionality of the libraries li
 
 ## Setup / Uninstall
 Put the autotheme.exe file anywhere on your system and double clic it.
+
 On your first run, it will show the options window and you can set the sunrise/sunset hours, if you work at night or if you want to calculate the hours using your location.
+
 The run on startup option will create a shortcut on your startup folder, that is normally "C:\Users\[YOUR_USERNAME]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup".
+
 Additionally, a text file called conf.conf will be created beside the autotheme.exe file, to save the program options.
+
 To "uninstall" first deactivate the run on startup option. This will delete the shortcut in your startup folder. Then just delete the exe and the conf files. That's it.
 
 ## Contributing and donating
+
 Thank you so much for considering a contribution, it means a lot! Please refer to the contributing file to set you up.
+
 Check out the list of issues, I'll gladly accept patches for the issues I'm having trouble with!
+
 If you like this project and it has brought you a smile, please consider making a small donation in my paypal link, It would really be appreciated in these hard times. I can't be thankful enough.
 
 ## Third party python libraries used
