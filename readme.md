@@ -1,22 +1,24 @@
 ## Autotheme-19
 A Windows app that switches between dark and clear themes (on Windows 10) according to the times of the day you set. 
 
-The app sets the clear theme during the day at sunrise, and the dark theme at sunset.
+The app sets the clear theme during the day and the dark theme during the night.
 
 You can set the sunrise and sunset hours yourself or let the app calculate these times for you.
 
-The app can also run at startup so you basically set it and forget it. No matter when you turn on your computer, or if you haven't used it in a while, the app will change your theme according to its settings. It will also enforce the setting if the theme changes, i.e by another app.
+The app can also run at startup so you basically set it and forget it. 
+
+No matter when you turn your computer on, or if you haven't used it in a while, the app will change your theme according to its settings. It will also enforce the setting if the theme changes, i.e by another app.
 
 If you work at night, you can set the app to set the clear theme at night and the dark theme during the day.
 
-Written as a python learning project during the COVID-19 pandemic.
+Written as a Python learning project during the COVID-19 pandemic.
 
 Copyright © 2020 Juan Escobar Arias. Licensed under the terms of the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
 
 ## How does it work?
 You set a sunrise hour to set the clear theme and a sunset hour to activate the dark theme. Then the app sits on your system tray and waits for the specified time to change the theme.
 
-If you work during nighttime you can set the app to activate the clear theme at night and the dark theme during the day. Just check the "I work at night" option.
+Check the "I work at night" option (if you do so) to activate the clear theme at night and the dark theme during the day.
 
 You can also set the app to calculate the sunrise and sunset times according to your location. For this internet access is needed.
 
@@ -34,11 +36,11 @@ Put the autotheme.exe file anywhere on your system and double clic it.
 
 On your first run, it will show the options window and you can set the sunrise/sunset hours, if you work at night or if you want to calculate the hours using your location.
 
-The run on startup option will create a shortcut on your startup folder, that is normally "C:\Users\[YOUR_USERNAME]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup".
+The "Run on startup" option will create a shortcut on your startup folder, that is normally "C:\Users\[YOUR_USERNAME]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup".
 
 Additionally, a text file called conf.conf will be created beside the autotheme.exe file, to save the program options.
 
-To "uninstall" first deactivate the run on startup option. This will delete the shortcut in your startup folder. Then just delete the exe and the conf files. That's it.
+To "uninstall" first deactivate the "Run on startup" option. This will delete the shortcut in your startup folder. Then just delete the exe and the conf file. That's it.
 
 ## Contributing and donating
 
