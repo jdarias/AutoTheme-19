@@ -112,7 +112,7 @@ def load_conf():
     openconf.close()
     
     # if user set location, perform the calculation
-    if prog_options["use_location"]==True:
+    if prog_options["use_location"]==True and is_internet()==True:
         calc_location()
         #write_conf()
 
@@ -388,7 +388,7 @@ def aboutBox():
     lbl_title.grid(column=1, row=0, sticky="w", padx=10)
 
     # version
-    lbl_version=ttk.Label(text="Version 0.1", font=(None, 10, "bold"), master=frm_title)
+    lbl_version=ttk.Label(text="Version 0.1.1", font=(None, 10, "bold"), master=frm_title)
     lbl_version.grid(column=1, row=1, sticky="w", padx=10)
 
     # info about the program
